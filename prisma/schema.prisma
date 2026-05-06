@@ -1,0 +1,57 @@
+// prisma/schema.prisma
+// Esquema principal do banco de dados - circuito_tvo
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Trail {
+  id          Int      @id @default(autoincrement())
+  name        String
+  difficulty  String   // "facil" | "moderado" | "dificil"
+  distance    Float    // em quilômetros
+  location    String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("trails")
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  date        DateTime
+  location    String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Biodiversity {
+  id          Int      @id @default(autoincrement())
+  name        String
+  type        String   // "fauna" | "flora"
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("biodiversity")
+}
+
+model UserEvent {
+  id          Int      @id @default(autoincrement())
+  event_type  String   // ex: "view_trail", "click_event", "view_biodiversity"
+  entity_id   Int
+  entity_type String   // "trail" | "event" | "biodiversity"
+  timestamp   DateTime @default(now())
+
+  @@map("user_events")
+}

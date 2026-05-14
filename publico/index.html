@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Circuito TVO — Ecoturismo & Biodiversidade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-900: #0d2b1a;
+      --green-800: #1b4332;
+      --green-700: #2d6a4f;
+      --green-500: #40916c;
+      --green-400: #52b788;
+      --green-200: #b7e4c7;
+      --green-100: #d8f3dc;
+      --green-50:  #f0faf3;
+
+      --amber-400: #d4a017;
+      --amber-100: #fef3c7;
+      --amber-50:  #fffbeb;
+
+      --red-500:   #dc2626;
+      --red-100:   #fee2e2;
+
+      --surface:   #ffffff;
+      --bg:        #f2f5f0;
+      --border:    #dde8d8;
+      --border-md: #c8d9c2;
+
+      --text-primary:   #111c14;
+      --text-secondary: #4a5e4f;
+      --text-muted:     #8a9e8f;
+
+      --shadow-sm: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md: 0 4px 12px rgba(0,0,0,.09), 0 2px 4px rgba(0,0,0,.04);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,.12);
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ---- HEADER ---- */
+    header {
+      background: var(--green-800);
+      color: white;
+      padding: 0 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 34px; height: 34px;
+      background: var(--green-500);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    .logo-text { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.3px; }
+    .logo-sub  { font-size: 0.7rem; opacity: 0.55; margin-top: -2px; font-weight: 500; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .api-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 20px;
+      padding: 4px 12px 4px 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green-400);
+      flex-shrink: 0;
+    }
+    .dot.offline { background: #f87171; }
+
+    /* ---- STATS BAR ---- */
+    .stats-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .stat-item {
+      padding: 0.75rem 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+    }
+
+    .stat-item strong {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--green-700);
+    }
+
+    /* ---- TABS ---- */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2.5rem;
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      padding: 0.85rem 1.1rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    nav button:hover { color: var(--green-700); }
+    nav button.active { color: var(--green-700); border-bottom-color: var(--green-500); }
+
+    nav button .tab-count {
+      background: var(--green-100);
+      color: var(--green-700);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    nav button.active .tab-count {
+      background: var(--green-500);
+      color: white;
+    }
+
+    /* ---- MAIN ---- */
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 2rem 2.5rem;
+    }
+
+    section { animation: fadeIn 0.2s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---- SECTION HEADER ---- */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-header h2     { font-size: 1.15rem; font-weight: 800; }
+    .section-header p      { font-size: 0.83rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* botões*/
+    .btn-primary {
+      background: var(--green-700);
+      color: white;
+      border: none;
+      padding: 0.55rem 1.2rem;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover   { background: var(--green-800); }
+    .btn-primary:active  { transform: scale(0.98); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1.5px solid var(--border-md);
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-ghost:hover { background: var(--bg); border-color: var(--green-400); color: var(--green-700); }
+
+    .btn-track {
+      background: var(--green-50);
+      border: 1.5px solid var(--green-200);
+      color: var(--green-700);
+      padding: 0.28rem 0.8rem;
+      border-radius: 20px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-track:hover { background: var(--green-100); border-color: var(--green-400); }
+
+    .btn-delete {
+      background: transparent;
+      border: 1.5px solid var(--red-100);
+      color: var(--red-500);
+      padding: 0.28rem 0.7rem;
+      border-radius: 20px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-delete:hover { background: var(--red-100); }
+
+    /* formulario */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--green-500);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-sm);
+      animation: slideDown 0.2s ease;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--green-700);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+    .form-group label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.85rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      background: var(--surface);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--green-500);
+      box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.12);
+    }
+
+    .form-group textarea  { resize: vertical; min-height: 76px; }
+    .col-full             { grid-column: 1 / -1; }
+
+    .form-actions { display: flex; gap: 0.5rem; }
+
+    /* cartoes */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-accent {
+      height: 4px;
+      background: linear-gradient(90deg, var(--green-500), var(--green-400));
+    }
+
+    .card-accent.fauna  { background: linear-gradient(90deg, #2563eb, #60a5fa); }
+    .card-accent.flora  { background: linear-gradient(90deg, var(--green-500), var(--green-400)); }
+    .card-accent.dificil { background: linear-gradient(90deg, #dc2626, #f87171); }
+    .card-accent.moderado { background: linear-gradient(90deg, var(--amber-400), #fbbf24); }
+    .card-accent.facil  { background: linear-gradient(90deg, var(--green-500), var(--green-400)); }
+    .card-accent.event  { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+    .card-body { padding: 1.1rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .card h3 { font-size: 0.98rem; font-weight: 800; line-height: 1.3; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.18rem 0.65rem;
+      border-radius: 20px;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .badge-facil    { background: var(--green-100);  color: #1b4332; }
+    .badge-moderado { background: var(--amber-100);  color: #78350f; }
+    .badge-dificil  { background: var(--red-100);    color: #7f1d1d; }
+    .badge-fauna    { background: #dbeafe; color: #1e3a8a; }
+    .badge-flora    { background: var(--green-100);  color: #14532d; }
+    .badge-event    { background: #ede9fe; color: #4c1d95; }
+
+    .card-desc {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 0.85rem;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 8px;
+      font-weight: 600;
+    }
+
+    .card-footer {
+      display: flex;
+      gap: 0.4rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    /* ---- STATES ---- */
+    .loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .loading-spinner {
+      width: 28px; height: 28px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green-500);
+      border-radius: 50%;
+      margin: 0 auto 0.75rem;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    .empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .empty p    { font-size: 0.88rem; }
+
+    /* ---- METRICS ---- */
+    .metrics-kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .kpi-value {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--green-700);
+      line-height: 1;
+    }
+
+    .kpi-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 700px) { .charts-grid { grid-template-columns: 1fr; } }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chart-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      margin-bottom: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.65rem;
+    }
+
+    .bar-label {
+      font-size: 0.79rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+      min-width: 110px;
+      max-width: 130px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bar-track {
+      flex: 1;
+      background: var(--bg);
+      border-radius: 4px;
+      height: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .bar-fill {
+      background: var(--green-400);
+      height: 100%;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 6px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: var(--green-900);
+      min-width: 24px;
+      transition: width 0.5s cubic-bezier(.4,0,.2,1);
+    }
+
+    .bar-fill.purple { background: #a78bfa; color: #2e1065; }
+    .bar-fill.blue   { background: #60a5fa; color: #1e3a8a; }
+
+    /* ---- TOAST ---- */
+    .toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--green-800);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 600;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: 320px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.error { background: var(--red-500); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">🌿</div>
+    <div>
+      <div class="logo-text">Circuito TVO</div>
+      <div class="logo-sub">Ecoturismo & Biodiversidade</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="api-pill">
+      <span class="dot" id="dot"></span>
+      <span id="status-text">conectando...</span>
+    </div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <strong id="count-trails">—</strong>
+    trilhas cadastradas
+  </div>
+  <div class="stat-item">
+    <strong id="count-events">—</strong>
+    eventos
+  </div>
+  <div class="stat-item">
+    <strong id="count-bio">—</strong>
+    espécies
+  </div>
+  <div class="stat-item" style="margin-left: auto;">
+    <strong id="count-tracking" style="color: var(--green-700)">—</strong>
+    interações registradas
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <button class="active" onclick="switchTab('trails')">
+    🥾 Trilhas <span class="tab-count" id="tc-trails">0</span>
+  </button>
+  <button onclick="switchTab('events')">
+    📅 Eventos <span class="tab-count" id="tc-events">0</span>
+  </button>
+  <button onclick="switchTab('biodiversity')">
+    🦜 Biodiversidade <span class="tab-count" id="tc-bio">0</span>
+  </button>
+  <button onclick="switchTab('metrics')">
+    📊 Métricas
+  </button>
+</nav>
+
+<main>
+
+  <!-- ===== TRILHAS ===== -->
+  <section id="tab-trails">
+    <div class="section-header">
+      <div>
+        <h2>Trilhas</h2>
+        <p>Rotas ecológicas cadastradas na plataforma</p>
+      </div>
+      <button class="btn-primary" onclick="toggleForm('form-trail')">+ Nova trilha</button>
+    </div>
+
+    <div class="form-card hidden" id="form-trail">
+      <div class="form-card-title">Cadastrar nova trilha</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="trail-name" placeholder="Ex: Trilha da Pedra Riscada">
+        </div>
+        <div class="form-group">
+          <label>Dificuldade *</label>
+          <select id="trail-difficulty">
+            <option value="">Selecione...</option>
+            <option value="facil">Fácil</option>
+            <option value="moderado">Moderado</option>
+            <option value="dificil">Difícil</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Distância (km) *</label>
+          <input type="number" id="trail-distance" placeholder="Ex: 4.5" step="0.1" min="0.1">
+        </div>
+        <div class="form-group">
+          <label>Localização *</label>
+          <input type="text" id="trail-location" placeholder="Ex: Maricá, RJ">
+        </div>
+        <div class="form-group col-full">
+          <label>Descrição</label>
+          <textarea id="trail-description" placeholder="Descreva a trilha, pontos de interesse, fauna e flora esperada..."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="createTrail()">✓ Salvar trilha</button>
+        <button class="btn-ghost" onclick="toggleForm('form-trail')">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="trails-loading" class="loading">
+      <div class="loading-spinner"></div>
+      Buscando trilhas...
+    </div>
+    <div id="trails-grid" class="cards-grid hidden"></div>
+    <div id="trails-empty" class="empty hidden">
+      <div class="empty-icon">🥾</div>
+      <p>Nenhuma trilha cadastrada ainda.</p>
+    </div>
+  </section>
+
+  <!-- ===== EVENTOS ===== -->
+  <section id="tab-events" class="hidden">
+    <div class="section-header">
+      <div>
+        <h2>Eventos</h2>
+        <p>Atividades e eventos ambientais programados</p>
+      </div>
+      <button class="btn-primary" onclick="toggleForm('form-event')">+ Novo evento</button>
+    </div>
+
+    <div class="form-card hidden" id="form-event">
+      <div class="form-card-title">Cadastrar novo evento</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Título *</label>
+          <input type="text" id="event-title" placeholder="Ex: Festival de Birdwatching">
+        </div>
+        <div class="form-group">
+          <label>Data *</label>
+          <input type="datetime-local" id="event-date">
+        </div>
+        <div class="form-group">
+          <label>Localização *</label>
+          <input type="text" id="event-location" placeholder="Ex: Maricá, RJ">
+        </div>
+        <div class="form-group col-full">
+          <label>Descrição</label>
+          <textarea id="event-description" placeholder="Detalhes do evento, programação, como participar..."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="createEvent()">✓ Salvar evento</button>
+        <button class="btn-ghost" onclick="toggleForm('form-event')">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="events-loading" class="loading">
+      <div class="loading-spinner"></div>
+      Buscando eventos...
+    </div>
+    <div id="events-grid" class="cards-grid hidden"></div>
+    <div id="events-empty" class="empty hidden">
+      <div class="empty-icon">📅</div>
+      <p>Nenhum evento cadastrado ainda.</p>
+    </div>
+  </section>
+
+  <!-- ===== BIODIVERSIDADE ===== -->
+  <section id="tab-biodiversity" class="hidden">
+    <div class="section-header">
+      <div>
+        <h2>Biodiversidade</h2>
+        <p>Fauna e flora registrada nas regiões mapeadas</p>
+      </div>
+      <button class="btn-primary" onclick="toggleForm('form-bio')">+ Nova espécie</button>
+    </div>
+
+    <div class="form-card hidden" id="form-bio">
+      <div class="form-card-title">Cadastrar espécie</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nome *</label>
+          <input type="text" id="bio-name" placeholder="Ex: Mico-leão-dourado">
+        </div>
+        <div class="form-group">
+          <label>Tipo *</label>
+          <select id="bio-type">
+            <option value="">Selecione...</option>
+            <option value="fauna">🐾 Fauna</option>
+            <option value="flora">🌿 Flora</option>
+          </select>
+        </div>
+        <div class="form-group col-full">
+          <label>Descrição</label>
+          <textarea id="bio-description" placeholder="Características, habitat, status de conservação..."></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="createBio()">✓ Salvar espécie</button>
+        <button class="btn-ghost" onclick="toggleForm('form-bio')">Cancelar</button>
+      </div>
+    </div>
+
+    <div id="bio-loading" class="loading">
+      <div class="loading-spinner"></div>
+      Buscando espécies...
+    </div>
+    <div id="bio-grid" class="cards-grid hidden"></div>
+    <div id="bio-empty" class="empty hidden">
+      <div class="empty-icon">🌿</div>
+      <p>Nenhuma espécie cadastrada ainda.</p>
+    </div>
+  </section>
+
+  <!-- ===== MÉTRICAS ===== -->
+  <section id="tab-metrics" class="hidden">
+    <div class="section-header">
+      <div>
+        <h2>Métricas de engajamento</h2>
+        <p>Dados de tracking e interações dos usuários</p>
+      </div>
+      <button class="btn-ghost" onclick="loadMetrics()">↻ Atualizar</button>
+    </div>
+
+    <div id="metrics-loading" class="loading">
+      <div class="loading-spinner"></div>
+      Calculando métricas...
+    </div>
+
+    <div id="metrics-content" class="hidden">
+      <div class="metrics-kpis" id="metrics-kpis"></div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="chart-title">🥾 Trilhas mais visualizadas</div>
+          <div id="chart-trails"></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-title">📊 Interações por tipo</div>
+          <div id="chart-engagement"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="metrics-empty" class="empty hidden">
+      <div class="empty-icon">📊</div>
+      <p>Nenhuma interação registrada ainda.<br>Explore o sistema e clique em "Registrar view"!</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const API   = '';
+  const TABS  = ['trails', 'events', 'biodiversity', 'metrics'];
+  let counts  = { trails: 0, events: 0, bio: 0 };
+
+  // ---- API health ----
+  async function checkApi() {
+    try {
+      const r = await fetch(API + '/health');
+      if (r.ok) {
+        setDot(true);
+        loadCounts();
+      } else throw '';
+    } catch {
+      setDot(false);
+    }
+  }
+
+  function setDot(ok) {
+    document.getElementById('dot').className = 'dot' + (ok ? '' : ' offline');
+    document.getElementById('status-text').textContent = ok ? 'API online' : 'API offline';
+  }
+
+  async function loadCounts() {
+    try {
+      const [t, e, b, m] = await Promise.all([
+        fetch(API + '/trails').then(r => r.json()),
+        fetch(API + '/events').then(r => r.json()),
+        fetch(API + '/biodiversity').then(r => r.json()),
+        fetch(API + '/metrics/events-engagement').then(r => r.json()),
+      ]);
+      counts.trails = t.count || 0;
+      counts.events = e.count || 0;
+      counts.bio    = b.count || 0;
+      document.getElementById('count-trails').textContent   = counts.trails;
+      document.getElementById('count-events').textContent   = counts.events;
+      document.getElementById('count-bio').textContent      = counts.bio;
+      document.getElementById('count-tracking').textContent = m.data?.total_interactions ?? 0;
+      document.getElementById('tc-trails').textContent = counts.trails;
+      document.getElementById('tc-events').textContent = counts.events;
+      document.getElementById('tc-bio').textContent    = counts.bio;
+    } catch { /* silencioso */ }
+  }
+
+  // ---- Nav ----
+  function switchTab(tab) {
+    document.querySelectorAll('section[id^="tab-"]').forEach(s => s.classList.add('hidden'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.remove('hidden');
+    document.querySelectorAll('nav button')[TABS.indexOf(tab)].classList.add('active');
+    if      (tab === 'trails')       loadTrails();
+    else if (tab === 'events')       loadEvents();
+    else if (tab === 'biodiversity') loadBio();
+    else if (tab === 'metrics')      loadMetrics();
+  }
+
+  function toggleForm(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('hidden');
+    if (!el.classList.contains('hidden'))
+      el.querySelector('input, select')?.focus();
+  }
+
+  // ---- Toast ----
+  function toast(msg, err = false) {
+    const t = document.getElementById('toast');
+    t.innerHTML = (err ? '⚠ ' : '✓ ') + msg;
+    t.className = 'toast show' + (err ? ' error' : '');
+    clearTimeout(t._t);
+    t._t = setTimeout(() => { t.className = 'toast'; }, 3000);
+  }
+
+  // ---- Track (silencioso) ----
+  async function track(event_type, entity_id, entity_type) {
+    try {
+      await fetch(API + '/tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event_type, entity_id, entity_type })
+      });
+      document.getElementById('count-tracking').textContent =
+        parseInt(document.getElementById('count-tracking').textContent || 0) + 1;
+    } catch { /* silencioso */ }
+  }
+
+  // ---- Helpers ----
+  const diffLabel = { facil: 'Fácil', moderado: 'Moderado', dificil: 'Difícil' };
+
+  function badge(cls, label) {
+    return `<span class="badge badge-${cls}">${label}</span>`;
+  }
+
+  function metaItem(icon, text) {
+    return `<span class="meta-item">${icon} ${text}</span>`;
+  }
+
+  function fmtDate(iso) {
+    return new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function setState(pfx, state) {
+    ['loading', 'grid', 'empty', 'content'].forEach(s => {
+      const el = document.getElementById(pfx + '-' + s);
+      if (el) el.classList.add('hidden');
+    });
+    const target = document.getElementById(pfx + '-' + state);
+    if (target) target.classList.remove('hidden');
+  }
+
+  // ==================== TRILHAS ====================
+  async function loadTrails() {
+    setState('trails', 'loading');
+    try {
+      const { data } = await fetch(API + '/trails').then(r => r.json());
+      if (!data.length) { setState('trails', 'empty'); return; }
+
+      document.getElementById('trails-grid').innerHTML = data.map(t => `
+        <div class="card">
+          <div class="card-accent ${t.difficulty}"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <h3>${t.name}</h3>
+              ${badge(t.difficulty, diffLabel[t.difficulty] || t.difficulty)}
+            </div>
+            <div class="card-meta">
+              ${metaItem('📍', t.location)}
+              ${metaItem('📏', t.distance + ' km')}
+            </div>
+            ${t.description ? `<p class="card-desc">${t.description}</p>` : ''}
+            <div class="card-footer">
+              <button class="btn-track" onclick="track('view_trail',${t.id},'trail'); toast('View registrada!')">
+                + Registrar view
+              </button>
+              <button class="btn-delete" onclick="deleteTrail(${t.id})">Excluir</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      setState('trails', 'grid');
+    } catch {
+      setState('trails', 'empty');
+      toast('Erro ao carregar trilhas. Backend online?', true);
+    }
+  }
+
+  async function createTrail() {
+    const body = {
+      name:        document.getElementById('trail-name').value.trim(),
+      difficulty:  document.getElementById('trail-difficulty').value,
+      distance:    parseFloat(document.getElementById('trail-distance').value),
+      location:    document.getElementById('trail-location').value.trim(),
+      description: document.getElementById('trail-description').value.trim() || undefined,
+    };
+    try {
+      const r = await fetch(API + '/trails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) { const e = await r.json(); throw new Error(e.error); }
+      toggleForm('form-trail');
+      toast('Trilha criada com sucesso!');
+      counts.trails++;
+      document.getElementById('count-trails').textContent = counts.trails;
+      document.getElementById('tc-trails').textContent    = counts.trails;
+      loadTrails();
+    } catch (e) { toast(e.message || 'Erro ao criar trilha', true); }
+  }
+
+  async function deleteTrail(id) {
+    if (!confirm('Excluir esta trilha?')) return;
+    try {
+      await fetch(API + '/trails/' + id, { method: 'DELETE' });
+      toast('Trilha excluída.');
+      counts.trails = Math.max(0, counts.trails - 1);
+      document.getElementById('count-trails').textContent = counts.trails;
+      document.getElementById('tc-trails').textContent    = counts.trails;
+      loadTrails();
+    } catch { toast('Erro ao excluir', true); }
+  }
+
+  // ==================== EVENTOS ====================
+  async function loadEvents() {
+    setState('events', 'loading');
+    try {
+      const { data } = await fetch(API + '/events').then(r => r.json());
+      if (!data.length) { setState('events', 'empty'); return; }
+
+      document.getElementById('events-grid').innerHTML = data.map(e => `
+        <div class="card">
+          <div class="card-accent event"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <h3>${e.title}</h3>
+              ${badge('event', 'Evento')}
+            </div>
+            <div class="card-meta">
+              ${metaItem('📅', fmtDate(e.date))}
+              ${metaItem('📍', e.location)}
+            </div>
+            ${e.description ? `<p class="card-desc">${e.description}</p>` : ''}
+            <div class="card-footer">
+              <button class="btn-track" onclick="track('click_event',${e.id},'event'); toast('Interação registrada!')">
+                + Registrar clique
+              </button>
+              <button class="btn-delete" onclick="deleteEvent(${e.id})">Excluir</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      setState('events', 'grid');
+    } catch {
+      setState('events', 'empty');
+      toast('Erro ao carregar eventos', true);
+    }
+  }
+
+  async function createEvent() {
+    const dateVal = document.getElementById('event-date').value;
+    const body = {
+      title:       document.getElementById('event-title').value.trim(),
+      date:        dateVal ? new Date(dateVal).toISOString() : '',
+      location:    document.getElementById('event-location').value.trim(),
+      description: document.getElementById('event-description').value.trim() || undefined,
+    };
+    try {
+      const r = await fetch(API + '/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) { const e = await r.json(); throw new Error(e.error); }
+      toggleForm('form-event');
+      toast('Evento criado com sucesso!');
+      counts.events++;
+      document.getElementById('count-events').textContent = counts.events;
+      document.getElementById('tc-events').textContent    = counts.events;
+      loadEvents();
+    } catch (e) { toast(e.message || 'Erro ao criar evento', true); }
+  }
+
+  async function deleteEvent(id) {
+    if (!confirm('Excluir este evento?')) return;
+    try {
+      await fetch(API + '/events/' + id, { method: 'DELETE' });
+      toast('Evento excluído.');
+      counts.events = Math.max(0, counts.events - 1);
+      document.getElementById('count-events').textContent = counts.events;
+      document.getElementById('tc-events').textContent    = counts.events;
+      loadEvents();
+    } catch { toast('Erro ao excluir', true); }
+  }
+
+  // ==================== BIODIVERSIDADE ====================
+  async function loadBio() {
+    setState('bio', 'loading');
+    try {
+      const { data } = await fetch(API + '/biodiversity').then(r => r.json());
+      if (!data.length) { setState('bio', 'empty'); return; }
+
+      document.getElementById('bio-grid').innerHTML = data.map(b => `
+        <div class="card">
+          <div class="card-accent ${b.type}"></div>
+          <div class="card-body">
+            <div class="card-top">
+              <h3>${b.name}</h3>
+              ${badge(b.type, b.type === 'fauna' ? '🐾 Fauna' : '🌿 Flora')}
+            </div>
+            ${b.description ? `<p class="card-desc">${b.description}</p>` : ''}
+            <div class="card-footer">
+              <button class="btn-track" onclick="track('view_biodiversity',${b.id},'biodiversity'); toast('View registrada!')">
+                + Registrar view
+              </button>
+              <button class="btn-delete" onclick="deleteBio(${b.id})">Excluir</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      setState('bio', 'grid');
+    } catch {
+      setState('bio', 'empty');
+      toast('Erro ao carregar biodiversidade', true);
+    }
+  }
+
+  async function createBio() {
+    const body = {
+      name:        document.getElementById('bio-name').value.trim(),
+      type:        document.getElementById('bio-type').value,
+      description: document.getElementById('bio-description').value.trim() || undefined,
+    };
+    try {
+      const r = await fetch(API + '/biodiversity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) { const e = await r.json(); throw new Error(e.error); }
+      toggleForm('form-bio');
+      toast('Espécie cadastrada com sucesso!');
+      counts.bio++;
+      document.getElementById('count-bio').textContent = counts.bio;
+      document.getElementById('tc-bio').textContent    = counts.bio;
+      loadBio();
+    } catch (e) { toast(e.message || 'Erro ao cadastrar', true); }
+  }
+
+  async function deleteBio(id) {
+    if (!confirm('Excluir esta espécie?')) return;
+    try {
+      await fetch(API + '/biodiversity/' + id, { method: 'DELETE' });
+      toast('Espécie excluída.');
+      counts.bio = Math.max(0, counts.bio - 1);
+      document.getElementById('count-bio').textContent = counts.bio;
+      document.getElementById('tc-bio').textContent    = counts.bio;
+      loadBio();
+    } catch { toast('Erro ao excluir', true); }
+  }
+
+  // ==================== MÉTRICAS ====================
+  async function loadMetrics() {
+    setState('metrics', 'loading');
+    try {
+      const [r1, r2] = await Promise.all([
+        fetch(API + '/metrics/most-viewed-trails').then(r => r.json()),
+        fetch(API + '/metrics/events-engagement').then(r => r.json()),
+      ]);
+      const trailsData = r1.data;
+      const engage     = r2.data;
+
+      if (!engage.total_interactions && !trailsData.length) {
+        setState('metrics', 'empty');
+        return;
+      }
+
+      // KPIs
+      const byType   = engage.by_entity_type || [];
+      const bioCount = byType.find(x => x.entity_type === 'biodiversity')?.count ?? 0;
+
+      document.getElementById('metrics-kpis').innerHTML = `
+        <div class="kpi-card">
+          <div class="kpi-label">Total de interações</div>
+          <div class="kpi-value">${engage.total_interactions}</div>
+          <div class="kpi-sub">eventos de tracking</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Trilhas com views</div>
+          <div class="kpi-value">${trailsData.length}</div>
+          <div class="kpi-sub">de ${counts.trails} trilhas</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Tipos de evento</div>
+          <div class="kpi-value">${engage.by_event_type.length}</div>
+          <div class="kpi-sub">tipos distintos</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Views biodiversidade</div>
+          <div class="kpi-value">${bioCount}</div>
+          <div class="kpi-sub">interações com espécies</div>
+        </div>
+      `;
+
+      // Chart trilhas
+      const maxT = trailsData.length ? Math.max(...trailsData.map(t => t.view_count)) : 1;
+      document.getElementById('chart-trails').innerHTML = trailsData.length
+        ? trailsData.map(t => `
+          <div class="bar-row">
+            <span class="bar-label" title="${t.trail?.name}">${t.trail?.name || '#' + t.trail?.id}</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:${Math.round(t.view_count / maxT * 100)}%">${t.view_count}</div>
+            </div>
+          </div>`).join('')
+        : '<p style="font-size:.82rem;color:var(--text-muted)">Sem dados de views ainda.</p>';
+
+      // Chart engagement
+      const colors  = ['', 'purple', 'blue', '', 'purple'];
+      const maxE = engage.by_event_type.length ? Math.max(...engage.by_event_type.map(e => e.count)) : 1;
+      document.getElementById('chart-engagement').innerHTML = engage.by_event_type.map((e, i) => `
+        <div class="bar-row">
+          <span class="bar-label" title="${e.event_type}">${e.event_type}</span>
+          <div class="bar-track">
+            <div class="bar-fill ${colors[i % colors.length]}" style="width:${Math.round(e.count / maxE * 100)}%">${e.count}</div>
+          </div>
+        </div>`).join('');
+
+      setState('metrics', 'content');
+    } catch {
+      setState('metrics', 'empty');
+      toast('Erro ao carregar métricas', true);
+    }
+  }
+
+ 
+  checkApi();
+  loadTrails();
+</script>
+</body>
+</html>

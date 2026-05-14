@@ -20,31 +20,31 @@ async function findById(id) {
 }
 
 async function create(data) {
-  const { title, date, location, description } = data
+  const { titulo, data, localizacao, descricao } = data
 
-  if (!title || !date || !location) {
-    const error = new Error('Campos obrigatórios: title, date, location')
+  if (!titulo || !data || !localizacao) {
+    const error = new Error('Campos obrigatórios: titulo, data, localizacao')
     error.statusCode = 400
     throw error
   }
 
-  const parsedDate = new Date(date)
+  const parsedDate = new Date(data)
   if (isNaN(parsedDate.getTime())) {
     const error = new Error('Data inválida. Use formato ISO 8601 (ex: 2025-07-15T08:00:00Z)')
     error.statusCode = 400
     throw error
   }
 
-  return prisma.event.create({ data: { title, date: parsedDate, location, description } })
+  return prisma.event.create({ data: { titulo, data: parsedDate, localizacao, descricao } })
 }
 
 async function update(id, data) {
-  await findById(id) // garante que existe
+  await findById(id)
 
   if (data.date) {
     const parsedDate = new Date(data.date)
     if (isNaN(parsedDate.getTime())) {
-      const error = new Error('Data inválida. Use formato ISO 8601')
+      const error = new Error('Formatoinválido.')
       error.statusCode = 400
       throw error
     }
@@ -55,7 +55,7 @@ async function update(id, data) {
 }
 
 async function remove(id) {
-  await findById(id) // garante que existe
+  await findById(id)
   await prisma.event.delete({ where: { id } })
 }
 

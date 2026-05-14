@@ -1,10 +1,9 @@
 // src/database/prisma.js
-// Instância única do Prisma Client (singleton pattern)
 
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
+  log: process.env.NODE_ENV === 'development' ? ['erro', 'aviso'] : ['erro'],
 })
 
 module.exports = prisma

@@ -1,11 +1,11 @@
-// src/controllers/event.controller.js
+// src/controllers/eventos.controller.js
 
-const eventService = require('../services/event.service')
+const eventosService = require('../services/eventos.service')
 
 async function getAll(req, res, next) {
   try {
-    const events = await eventService.findAll()
-    res.json({ data: events, count: events.length })
+    const eventos = await eventosService.findAll()
+    res.json({ data: eventos, count: eventos.length })
   } catch (error) {
     next(error)
   }
@@ -14,7 +14,7 @@ async function getAll(req, res, next) {
 async function getById(req, res, next) {
   try {
     const id = parseInt(req.params.id)
-    const event = await eventService.findById(id)
+    const event = await eventosService.findById(id)
     res.json({ data: event })
   } catch (error) {
     next(error)
@@ -23,8 +23,8 @@ async function getById(req, res, next) {
 
 async function create(req, res, next) {
   try {
-    const event = await eventService.create(req.body)
-    res.status(201).json({ data: event, message: 'Evento criado com sucesso' })
+    const event = await eventosService.create(req.body)
+    res.status(201).json({ data: event, message: 'Evento criado!' })
   } catch (error) {
     next(error)
   }
@@ -33,8 +33,8 @@ async function create(req, res, next) {
 async function update(req, res, next) {
   try {
     const id = parseInt(req.params.id)
-    const event = await eventService.update(id, req.body)
-    res.json({ data: event, message: 'Evento atualizado com sucesso' })
+    const event = await eventosService.update(id, req.body)
+    res.json({ data: event, message: 'Evento atualizado.' })
   } catch (error) {
     next(error)
   }
@@ -43,8 +43,8 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
   try {
     const id = parseInt(req.params.id)
-    await eventService.remove(id)
-    res.json({ message: 'Evento removido com sucesso' })
+    await eventosService.remove(id)
+    res.json({ message: 'Evento removido.' })
   } catch (error) {
     next(error)
   }

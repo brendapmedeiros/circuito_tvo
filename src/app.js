@@ -1,46 +1,47 @@
-// src/app.js
-// Configuração central do Express
+/* Config do Express */
 
 require('dotenv').config()
 
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 
-const trailRoutes = require('./routes/trail.routes')
-const eventRoutes = require('./routes/event.routes')
-const biodiversityRoutes = require('./routes/biodiversity.routes')
+const trailRoutes = require('./routes/trilhas.routes')
+const eventRoutes = require('./routes/eventos.routes')
+const biodiversityRoutes = require('./routes/biodiversidade.routes')
 const trackingRoutes = require('./routes/tracking.routes')
-const metricsRoutes = require('./routes/metrics.routes')
+const metricsRoutes = require('./routes/metricas.routes')
 const errorHandler = require('./middlewares/errorHandler')
 
 const app = express()
 
-// --- Middlewares globais ---
+/* Middleware */
+
 app.use(cors())
 app.use(express.json())
 
-// --- Rota de health check ---
+/* check saúde */
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
-    project: 'circuito_tvo',
+    projeto: 'circuito_tvo',
     timestamp: new Date().toISOString(),
   })
 })
-
-// --- Rotas da API ---
-app.use('/trails', trailRoutes)
-app.use('/events', eventRoutes)
-app.use('/biodiversity', biodiversityRoutes)
+app.use(express.static(path.join(__dirname, '../public')))
+/* Rotas */
+app.use('/trilhas', trailRoutes)
+app.use('/eventos', eventRoutes)
+app.use('/biodiversidade', biodiversityRoutes)
 app.use('/tracking', trackingRoutes)
-app.use('/metrics', metricsRoutes)
+app.use('/metricas', metricsRoutes)
 
-// --- Rota 404 ---
+/* rota 404 */
 app.use((req, res) => {
   res.status(404).json({ error: `Rota não encontrada: ${req.method} ${req.path}` })
 })
 
-// --- Middleware de erro (deve ser o último) ---
+
 app.use(errorHandler)
 
 module.exports = app

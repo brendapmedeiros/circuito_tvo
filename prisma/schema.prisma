@@ -1,57 +1,56 @@
-// prisma/schema.prisma
-// Esquema principal do banco de dados - circuito_tvo
+// Esquema do banco
 
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
+origem db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Trail {
+modelo trilha {
   id          Int      @id @default(autoincrement())
-  name        String
-  difficulty  String   // "facil" | "moderado" | "dificil"
-  distance    Float    // em quilômetros
-  location    String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  nome        String
+  dificuldade  String   // "facil" | "moderado" | "dificil"
+  distancia    Float    // em quilômetros
+  localizacao    String
+  descricao String?
+  criadoEm   DateTime @default(now())
+  atualizadoEm   DateTime @updatedAt
 
-  @@map("trails")
+  @@map("trilhas")
 }
 
-model Event {
+model eventos {
   id          Int      @id @default(autoincrement())
-  title       String
-  date        DateTime
-  location    String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  titulo       String
+  data        DateTime
+  localizacao    String
+  descricao String?
+  criadoEm   DateTime @default(now())
+  atualizadoEm   DateTime @updatedAt
 
-  @@map("events")
+  @@map("eventos")
 }
 
-model Biodiversity {
+model Biodiversidade {
   id          Int      @id @default(autoincrement())
-  name        String
-  type        String   // "fauna" | "flora"
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  nome        String
+  tipo        String   
+  descricao String?
+  criadoEm   DateTime @default(now())
+  atualizadoEm   DateTime @updatedAt
 
-  @@map("biodiversity")
+  @@map("biodiversidade")
 }
 
-model UserEvent {
+model eventos_usuarios {
   id          Int      @id @default(autoincrement())
-  event_type  String   // ex: "view_trail", "click_event", "view_biodiversity"
+  tipo_evento  String   
   entity_id   Int
-  entity_type String   // "trail" | "event" | "biodiversity"
+  entity_tipo String   
   timestamp   DateTime @default(now())
 
-  @@map("user_events")
+  @@map("user_eventos")
 }

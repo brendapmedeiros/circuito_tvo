@@ -2,14 +2,13 @@
 // Middleware central de tratamento de erros
 
 function errorHandler(error, req, res, next) {
-  // Erros conhecidos (lançados pelos services)
   if (error.statusCode) {
     return res.status(error.statusCode).json({
       error: error.message,
     })
   }
 
-  // Erros do Prisma (ex: violação de constraint, campo não encontrado)
+  // erros prisma
   if (error.code) {
     if (error.code === 'P2002') {
       return res.status(409).json({ error: 'Registro duplicado' })
@@ -19,9 +18,9 @@ function errorHandler(error, req, res, next) {
     }
   }
 
-  // Erro genérico (inesperado)
+  // erro inesperado
   console.error('[ERROR]', error)
-  res.status(500).json({ error: 'Erro interno do servidor' })
+  res.status(500).json({ error: 'Erro interno, recarregue a página e tente novamente' })
 }
 
 module.exports = errorHandler

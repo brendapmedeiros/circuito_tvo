@@ -1,4 +1,4 @@
-const trilhasService = require('../services/trail.service')
+const trilhasService = require('../services/trilhas.service')
 
 async function getAll(req, res, next) {
   try {
@@ -48,4 +48,4 @@ async function remove(req, res, next) {
   }
 }
 
-module.exports = { getTodos, getPorId, create, update, remove }
+module.exports = { getAll, getById, create, update, remove }

@@ -1,26 +1,23 @@
-// src/services/event.service.js
-// Lógica de negócio para eventos
-
 const prisma = require('../database/prisma')
 
 async function findAll() {
-  return prisma.event.findMany({
-    orderBy: { date: 'asc' },
+  return prisma.eventos.findMany({
+    orderBy: { data: 'asc' },
   })
 }
 
 async function findById(id) {
-  const event = await prisma.event.findUnique({ where: { id } })
+  const event = await prisma.eventos.findUnique({ where: { id } })
   if (!event) {
-    const error = new Error(`Evento com id ${id} não encontrado`)
+    const error = new Error(`Evento ${id} não encontrado`)
     error.statusCode = 404
     throw error
   }
   return event
 }
 
-async function create(data) {
-  const { titulo, data, localizacao, descricao } = data
+async function create(body) {
+  const { titulo, data, localizacao, descricao } = body
 
   if (!titulo || !data || !localizacao) {
     const error = new Error('Campos obrigatórios: titulo, data, localizacao')
@@ -35,28 +32,28 @@ async function create(data) {
     throw error
   }
 
-  return prisma.event.create({ data: { titulo, data: parsedDate, localizacao, descricao } })
+  return prisma.eventos.create({ data: { titulo, data: parsedDate, localizacao, descricao } })
 }
 
-async function update(id, data) {
+async function update(id, body) {
   await findById(id)
 
-  if (data.date) {
-    const parsedDate = new Date(data.date)
+  if (body.data) {
+    const parsedDate = new Date(body.data)
     if (isNaN(parsedDate.getTime())) {
-      const error = new Error('Formatoinválido.')
+      const error = new Error('Formato de data inválido.')
       error.statusCode = 400
       throw error
     }
-    data.date = parsedDate
+    body.data = parsedDate
   }
 
-  return prisma.event.update({ where: { id }, data })
+  return prisma.eventos.update({ where: { id }, data: body })
 }
 
 async function remove(id) {
   await findById(id)
-  await prisma.event.delete({ where: { id } })
+  await prisma.eventos.delete({ where: { id } })
 }
 
 module.exports = { findAll, findById, create, update, remove }

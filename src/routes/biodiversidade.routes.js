@@ -1,7 +1,7 @@
-// src/routes/biodiversity.routes.js
+// src/routes/biodiversidade.routes.js
 
 const { Router } = require('express')
-const biodiversityController = require('../controllers/biodiversity.controller')
+const biodiversityController = require('../controllers/biodiversidade.controller')
 
 const router = Router()
 

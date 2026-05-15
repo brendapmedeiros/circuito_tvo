@@ -28,7 +28,8 @@ app.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
   })
 })
-app.use(express.static(path.join(__dirname, '../public')))
+
+app.use(express.static(path.join(__dirname, '../publico')))
 /* Rotas */
 app.use('/trilhas', trailRoutes)
 app.use('/eventos', eventRoutes)

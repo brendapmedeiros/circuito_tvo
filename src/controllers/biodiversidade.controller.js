@@ -1,6 +1,6 @@
 const biodiversidadeService = require('../services/biodiversidade.service')
 
-async function getTodos(req, res, next) {
+async function getAll(req, res, next) {
   try {
     const { type } = req.query
     const especies = await biodiversidadeService.findAll({ type })
@@ -10,7 +10,7 @@ async function getTodos(req, res, next) {
   }
 }
 
-async function getPorId(req, res, next) {
+async function getById(req, res, next) {
   try {
     const id = parseInt(req.params.id)
     const especie = await biodiversidadeService.findById(id)

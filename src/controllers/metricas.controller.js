@@ -1,4 +1,4 @@
-const metricasService = require('../services/metrics.service')
+const metricasService = require('../services/metricas.service')
 
 async function getTrilhasMaisVistas(req, res, next) {
   try {

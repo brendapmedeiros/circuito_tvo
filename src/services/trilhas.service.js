@@ -4,7 +4,7 @@ const dificuldadesValidas = ['facil', 'moderado', 'dificil']
 
 async function findAll() {
   return prisma.trail.findMany({
-    orderBy: { createdAt: 'desc' },
+    orderBy: { criadoEm: 'desc' },
   })
 }
 

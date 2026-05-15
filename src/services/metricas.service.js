@@ -1,12 +1,11 @@
-// src/services/metrics.service.js
-// Lógica de negócio para métricas e analytics
+// src/services/metricas.service.js
 
 const prisma = require('../database/prisma')
 
 
- *// Trilhas mais vistas
+ // Trilhas mais vistas
  
-async function getMostViewedTrails(limit = 10) {
+async function getTrilhasMaisVistas(limit = 10) {
   const viewCounts = await prisma.userEvent.groupBy({
     by: ['entity_id'],
     where: { tipo_evento: 'view_trail', entity_type: 'trail' },
@@ -63,4 +62,4 @@ async function getEngajamentoEventos() {
   }
 }
 
-module.exports = { getMostViewedTrails, getEngajamentoEventos }
+module.exports = { getTrilhasMaisVistas, getEngajamentoEventos }

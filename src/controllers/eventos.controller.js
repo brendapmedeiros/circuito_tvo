@@ -1,5 +1,3 @@
-// src/controllers/eventos.controller.js
-
 const eventosService = require('../services/eventos.service')
 
 async function getAll(req, res, next) {

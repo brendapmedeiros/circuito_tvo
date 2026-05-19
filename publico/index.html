@@ -393,15 +393,15 @@
       if (!data.length) { setState('trails', 'empty'); return; }
       document.getElementById('trails-grid').innerHTML = data.map(t => `
         <div class="card">
-          <div class="card-accent ${t.difficulty}"></div>
+          <div class="card-accent ${t.dificuldade}"></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>${t.name}</h3>
-              ${badge(t.difficulty, diffLabel[t.difficulty] || t.difficulty)}
+              <h3>${t.nome}</h3>
+              ${badge(t.dificuldade, diffLabel[t.dificuldade] || t.dificuldade)}
             </div>
             <div class="card-meta">
-              ${metaItem('📍', t.location)}
-              ${metaItem('📏', t.distance + ' km')}
+              ${metaItem('📍', t.localizacao)}
+              ${metaItem('📏', t.distancia + ' km')}
             </div>
             ${t.description ? `<p class="card-desc">${t.description}</p>` : ''}
             <div class="card-footer">
@@ -457,14 +457,14 @@
           <div class="card-accent event"></div>
           <div class="card-body">
             <div class="card-top">
-              <h3>${e.title}</h3>
+              <h3>${e.titulo}</h3>
               ${badge('event', 'Evento')}
             </div>
             <div class="card-meta">
-              ${metaItem('📅', fmtDate(e.date))}
-              ${metaItem('📍', e.location)}
+              ${metaItem('📅', fmtDate(e.data))}
+              ${metaItem('📍', e.localizacao)}
             </div>
-            ${e.description ? `<p class="card-desc">${e.description}</p>` : ''}
+            ${e.descricao ? `<p class="card-desc">${e.descricao}</p>` : ''}
             <div class="card-footer">
               <button class="btn-track" onclick="track('click_event',${e.id},'event'); toast('Interação registrada!')">+ Registrar clique</button>
               <button class="btn-delete" onclick="deleteEvent(${e.id})">Excluir</button>
@@ -478,10 +478,10 @@
   async function createEvent() {
     const dateVal = document.getElementById('event-date').value;
     const body = {
-      title:       document.getElementById('event-title').value.trim(),
-      date:        dateVal ? new Date(dateVal).toISOString() : '',
-      location:    document.getElementById('event-location').value.trim(),
-      description: document.getElementById('event-description').value.trim() || undefined,
+      titulo:       document.getElementById('event-title').value.trim(),
+      data:        dateVal ? new Date(dateVal).toISOString() : '',
+      localizacao:    document.getElementById('event-location').value.trim(),
+      descricao: document.getElementById('event-description').value.trim() || undefined,
     };
     try {
       const r = await fetch(API + '/eventos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -542,7 +542,7 @@
       const r = await fetch(API + '/biodiversidade', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (!r.ok) { const e = await r.json(); throw new Error(e.error); }
       toggleForm('form-bio');
-      toast('Espécie cadastrada com sucesso!');
+      toast('Espécie cadastrada.c');
       counts.bio++;
       document.getElementById('count-bio').textContent = counts.bio;
       document.getElementById('tc-bio').textContent    = counts.bio;
@@ -570,63 +570,57 @@
         fetch(API + '/metricas/trilhas-mais-vistas').then(r => r.json()),
         fetch(API + '/metricas/engajamento-eventos').then(r => r.json()),
       ]);
-      const trailsData = r1.data;
-      const engage     = r2.data;
 
-      // aceita campos em português ou inglês
-      const totalInteracoes = engage.total_interacoes ?? engage.total_interactions ?? 0;
-      const byEventType     = engage.by_event_type || [];
-      const byEntityType    = engage.by_entity_type || [];
+      // BLINDAGEM: Se não vier .data, assume o r1/r2 direto ou um array vazio
+      const trailsData = r1.data || (Array.isArray(r1) ? r1 : []);
+      const engage     = r2.data || r2 || {};
 
-      if (!totalInteracoes && !trailsData.length) { setState('metrics', 'empty'); return; }
+      // Usando optional chaining (?.) para não quebrar se engage for nulo
+      const totalInteracoes = engage?.total_interacoes ?? engage?.total_interactions ?? 0;
+      const byEventType     = engage?.by_event_type || [];
+      const byEntityType    = engage?.by_entity_type || [];
 
-      const bioCount = byEntityType.find(x => x.entity_type === 'biodiversidade' || x.entity_type === 'biodiversity')?.count ?? 0;
+      // Proteção para o trailsData.length
+      const hasData = (trailsData && trailsData.length > 0) || totalInteracoes > 0;
+      if (!hasData) {
+        setState('metrics', 'empty');
+        return;
+      }
 
+      const maxTrailViews = Math.max(...trailsData.map(item => item.views || item.visualizacoes || item.count || 0), 1);
       document.getElementById('metrics-kpis').innerHTML = `
-        <div class="kpi-card">
-          <div class="kpi-label">Total de interações</div>
-          <div class="kpi-value">${totalInteracoes}</div>
-          <div class="kpi-sub">eventos de tracking</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Trilhas com views</div>
-          <div class="kpi-value">${trailsData.length}</div>
-          <div class="kpi-sub">de ${counts.trails} trilhas</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Tipos de evento</div>
-          <div class="kpi-value">${byEventType.length}</div>
-          <div class="kpi-sub">tipos distintos</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Views biodiversidade</div>
-          <div class="kpi-value">${bioCount}</div>
-          <div class="kpi-sub">interações com espécies</div>
-        </div>`;
+        <div class="kpi-card"><div class="kpi-label">Interações totais</div><div class="kpi-value">${totalInteracoes}</div></div>
+        <div class="kpi-card"><div class="kpi-label">Tipos de evento</div><div class="kpi-value">${byEventType.length}</div></div>
+        <div class="kpi-card"><div class="kpi-label">Entidades</div><div class="kpi-value">${byEntityType.length}</div></div>
+      `;
 
-      const maxT = trailsData.length ? Math.max(...trailsData.map(t => t.view_count)) : 1;
-      document.getElementById('chart-trails').innerHTML = trailsData.length
-        ? trailsData.map(t => `
+      document.getElementById('chart-trails').innerHTML = trailsData.map(item => {
+        const label = item.nome || item.name || item.trilha || 'Sem nome';
+        const views = item.views || item.visualizacoes || item.count || 0;
+        const width = Math.round((views / maxTrailViews) * 100);
+        return `
           <div class="bar-row">
-            <span class="bar-label" title="${t.trail?.name || t.trail?.nome}">${t.trail?.name || t.trail?.nome || '#' + t.trail?.id}</span>
-            <div class="bar-track">
-              <div class="bar-fill" style="width:${Math.round(t.view_count / maxT * 100)}%">${t.view_count}</div>
-            </div>
-          </div>`).join('')
-        : '<p style="font-size:.82rem;color:var(--text-muted)">Sem dados de views ainda.</p>';
+            <div class="bar-label">${label}</div>
+            <div class="bar-track"><div class="bar-fill" style="width:${width}%">${views}</div></div>
+          </div>`;
+      }).join('');
 
-      const colors = ['', 'purple', 'blue', '', 'purple'];
-      const maxE   = byEventType.length ? Math.max(...byEventType.map(e => e.count)) : 1;
-      document.getElementById('chart-engagement').innerHTML = byEventType.map((e, i) => `
-        <div class="bar-row">
-          <span class="bar-label" title="${e.event_type || e.tipo_evento}">${e.event_type || e.tipo_evento}</span>
-          <div class="bar-track">
-            <div class="bar-fill ${colors[i % colors.length]}" style="width:${Math.round(e.count / maxE * 100)}%">${e.count}</div>
-          </div>
-        </div>`).join('');
+      document.getElementById('chart-engagement').innerHTML = byEventType.map(item => {
+        const label = item.tipo || item.type || item.name || 'Outro';
+        const value = item.count || item.quantidade || 0;
+        const width = totalInteracoes ? Math.round((value / totalInteracoes) * 100) : 0;
+        return `
+          <div class="bar-row">
+            <div class="bar-label">${label}</div>
+            <div class="bar-track"><div class="bar-fill purple" style="width:${width}%">${value}</div></div>
+          </div>`;
+      }).join('');
 
       setState('metrics', 'content');
-    } catch { setState('metrics', 'empty'); toast('Erro ao carregar métricas', true); }
+    } catch (e) {
+      setState('metrics', 'empty');
+      toast('Erro ao carregar métricas', true);
+    }
   }
 
   checkApi();

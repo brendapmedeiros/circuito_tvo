@@ -52,18 +52,21 @@ async function seed() {
         data: new Date('2025-07-15T08:00:00Z'),
         localizacao: 'Maricá, RJ',
         descricao: 'Observação de aves com guias especializados. Inscrições abertas.',
+      
       },
       {
         titulo: 'Mutirão de Limpeza das Trilhas',
         data: new Date('2025-06-21T07:00:00Z'),
         localizacao: 'Região Serrana, RJ',
         descricao: 'Evento voluntário de manutenção e limpeza das trilhas ecológicas locais.',
+       
       },
       {
         titulo: 'Seminário de Biodiversidade da Mata Atlântica',
         data: new Date('2025-08-10T09:00:00Z'),
         localizacao: 'Niterói, RJ',
         descricao: 'Palestras de pesquisadores sobre fauna e flora da Mata Atlântica fluminense.',
+    
       },
     ],
   })

@@ -27,7 +27,7 @@ async function create(body) {
 
   const parsedDate = new Date(data)
   if (isNaN(parsedDate.getTime())) {
-    const error = new Error('Data inválida. Use formato ISO 8601 (ex: 2025-07-15T08:00:00Z)')
+    const error = new Error('Data inválida')
     error.statusCode = 400
     throw error
   }

@@ -1,20 +1,17 @@
-// src/database/seed.js
-// Script de seed - popula o banco com dados de exemplo
-
 require('dotenv').config()
 const prisma = require('./prisma')
 
 async function seed() {
-  console.log('🌱 Iniciando seed do banco de dados...\n')
+  console.log('Iniciando seed do banco de dados...\n')
 
-  // Limpa as tabelas na ordem correta para evitar conflitos
-  await prisma.userEvent.deleteMany()
-  await prisma.trail.deleteMany()
-  await prisma.event.deleteMany()
-  await prisma.biodiversity.deleteMany()
+  // Limpa as tabelas (não alterar)
+  await prisma.eventos_usuarios.deleteMany()
+  await prisma.trilhas.deleteMany()
+  await prisma.eventos.deleteMany()
+  await prisma.biodiversidade.deleteMany()
 
-  // --- TRILHAS ---
-  const trails = await prisma.trail.createMany({
+  // Trilhas
+  const trails = await prisma.trilhas.createMany({
     data: [
       {
         name: 'Trilha da Pedra Riscada',
@@ -47,7 +44,7 @@ async function seed() {
     ],
   })
 
-  // --- EVENTOS ---
+  // Eventos
   const events = await prisma.event.createMany({
     data: [
       {
@@ -71,8 +68,8 @@ async function seed() {
     ],
   })
 
-  // --- BIODIVERSIDADE ---
-  const biodiversity = await prisma.biodiversity.createMany({
+  // Biodiversidade
+  const biodiversidade = await prisma.biodiversidade.createMany({
     data: [
       {
         name: 'Sabiá-laranjeira',
@@ -102,7 +99,7 @@ async function seed() {
     ],
   })
 
-  // --- TRACKING DE EXEMPLO ---
+  // Exemplo de tracking de eventos
   await prisma.userEvent.createMany({
     data: [
       { event_type: 'view_trail', entity_id: 1, entity_type: 'trail' },
@@ -117,16 +114,16 @@ async function seed() {
     ],
   })
 
-  console.log(`✅ Trilhas criadas: ${trails.count}`)
-  console.log(`✅ Eventos criados: ${events.count}`)
-  console.log(`✅ Espécies criadas: ${biodiversity.count}`)
-  console.log(`✅ Eventos de tracking criados: 9`)
-  console.log('\n🎉 Seed concluído com sucesso!')
+  console.log(`Trilhas criadas: ${trilhas.count}`)
+  console.log(` Eventos criados: ${eventos.count}`)
+  console.log(` Espécies criadas: ${biodiversidade.count}`)
+  console.log(` Eventos de tracking criados: 9`)
+  console.log('\n Seeding concluído.')
 }
 
 seed()
   .catch((error) => {
-    console.error('❌ Erro no seed:', error)
+    console.error('Erro no seeding:', error)
     process.exit(1)
   })
   .finally(async () => {

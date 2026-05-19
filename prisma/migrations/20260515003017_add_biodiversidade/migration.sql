@@ -1,20 +1,10 @@
-/*
-  Warnings:
 
-  - You are about to drop the `Trilhas` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `eventos_usuarios` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- AlterTable
 ALTER TABLE "biodiversidade" RENAME CONSTRAINT "biodiversity_pkey" TO "biodiversidade_pkey";
 
--- AlterTable
 ALTER TABLE "eventos" RENAME CONSTRAINT "events_pkey" TO "eventos_pkey";
 
--- DropTable
 DROP TABLE "Trilhas";
 
--- DropTable
 DROP TABLE "eventos_usuarios";
 
 -- CreateTable

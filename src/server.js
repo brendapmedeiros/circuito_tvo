@@ -1,7 +1,7 @@
 const app = require('./app')
 const prisma = require('./database/prisma')
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 8080
 
 async function startServer() {
   try {

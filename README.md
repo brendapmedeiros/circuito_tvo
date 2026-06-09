@@ -1,138 +1,208 @@
-# Plataforma de Ecoturismo e Biodiversidade (MVP)
+# Circuito TVO — Terê Verde Online
 
-Solução digital desenvolvida para centralizar e disponibilizar informações sobre biodiversidade e ecoturismo, permitindo a consulta de **trilhas, eventos e condições de atrações naturais** em um único ambiente.
-
-O projeto é estruturado como um **MVP com backend completo**, integrando uma **API REST**, banco de dados relacional e uma camada simplificada de **coleta de eventos para análise de uso**.
+> MVP Back-End desenvolvido para a disciplina de Desenvolvimento Web Back-End — UNIFESO, 2026/1
 
 ---
 
-## Sobre o Projeto
+## Integrante
 
-A plataforma tem como objetivo resolver a **dispersão de informações sobre ambientes naturais**, oferecendo uma experiência organizada e acessível.
-
-Além disso, o sistema foi projetado para **registrar interações dos usuários**, permitindo evolução futura orientada por dados e análise de comportamento.
-
----
-
-## Funcionalidades
-
-- Consulta de trilhas com informações detalhadas  
-- Consulta de eventos ambientais  
-- Consulta de dados de biodiversidade  
-- API REST com operações de **CRUD (criação, leitura, atualização e remoção)**  
-- Persistência em banco de dados relacional  
-- Registro de eventos de interação do usuário (**tracking**)  
+| Nome | RA |
+|------|----|
+| Brenda de Paula Medeiros | 06000808 |
 
 ---
 
-## Arquitetura
+## Situação-Problema
 
-O sistema segue uma arquitetura em camadas:
-Request → Routes → Controller → Service → Prisma (ORM) → PostgreSQL
-↓
-Error Handler
+**Desafio 1 — Circuito Terê Verde (Teresópolis)**
 
+Teresópolis é uma cidade turística localizado a 869 metros acima do nível do mar, conhecida por três unidades de conservação: o Parque Nacional da Serra dos Órgãos, o Parque Estadual dos Três Picos e o Parque Natural Municipal Montanhas de Teresópolis. Atrai visitantes em busca de trilhas, escaladas e contato com a biodiversidade da Mata Atlântica.
 
-Componentes:
-
-- **Frontend** para interação com o usuário  
-- **Backend** responsável pela lógica de negócio e API  
-- **Banco de dados relacional (PostgreSQL)**  
-- **ORM (Prisma)** para acesso aos dados  
-- **Middleware de erro** para tratamento centralizado  
+A proposta do **Circuito Terê Verde** é criar uma plataforma que centralize informações atualizadas sobre trilhas, biodiversidade, cachoeiras e eventos nos espaços protegidos da região, tornando-se uma ferramenta essencial para turistas que desejam explorar as belezas naturais da cidade de forma consciente.
 
 ---
 
-## Camada de Dados (Tracking)
+## Descrição do MVP
 
-A aplicação registra eventos de uso de forma simplificada:
+O **Circuito TVO** é uma API REST que centraliza o gerenciamento de informações sobre ecoturismo e biodiversidade. O sistema permite cadastrar e consultar trilhas, eventos ambientais e espécies de animais e plantas, além de registrar e analisar o comportamento dos usuários por um módulo de acompanhamento.
 
-```sql
-user_events
-- id
-- event_type
-- entity_id
-- entity_type
-- timestamp
+**Stack:**
+- Node.js + Express
+- PostgreSQL (Supabase)
+- Prisma ORM
+- Deploy no Railway
 
-Esses dados permitem identificar conteúdos mais acessados, nível de engajamento e padrões de comportamento dos usuários.
+---
 
-## Estrutura do Projeto
+## Requisitos Funcionais
 
+| ID | Requisito |
+|----|-----------|
+| RF01 | O sistema deve permitir cadastrar, listar, editar e excluir trilhas 
+| RF02 | O sistema deve permitir cadastrar, listar, editar e excluir eventos ambientais 
+| RF03 | O sistema deve permitir cadastrar, listar, editar e excluir espécies de animais e plantas 
+| RF04 | O sistema deve registrar interações dos usuários com o conteúdo (acompanhamento) 
+| RF05 | O sistema deve expor métricas de trilhas mais visualizadas 
+| RF06 | O sistema deve expor métricas de engajamento por tipo de evento 
+| RF07 | O sistema deve retornar respostas em formato JSON 
+| RF08 | O sistema deve validar os dados de entrada e retornar mensagens de erro tratadas e em linguagem entendível 
+
+---
+
+## Requisitos Não-Funcionais
+
+| ID | Requisito |
+|----|-----------|
+| RNF01 | A API deve ser organizada em camadas (routes, controllers, services) 
+| RNF02 | O banco de dados deve ser relacional (PostgreSQL) 
+| RNF03 | O acesso ao banco deve ser feito via ORM (Prisma) 
+| RNF04 | As configurações sensíveis devem ser armazenadas em variáveis de ambiente (.env) 
+| RNF05 | O código deve tratar erros de forma centralizada via middleware 
+| RNF06 | A aplicação deve estar disponível em ambiente de nuvem (Railway) 
+| RNF07 | O repositório deve estar versionado no GitHub 
+
+---
+
+## O que o MVP não faz
+
+- Autenticação e controle de acesso de usuários
+- Painel administrativo com interface gráfica própria
+- Upload de imagens ou arquivos
+- Sistema de avaliações ou comentários em trilhas
+- Integração com APIs externas de mapas ou clima
+- Aplicativo mobile
+- Notificações por e-mail ou push
+- Suporte a múltiplos idiomas
+
+---
+
+## Estrutura
+
+```
 circuito_tvo/
+├── data/
+│   └── seed.js                  # Dados de exemplo 
 ├── prisma/
-│   └── schema.prisma
+│   └── schema.prisma            # Esquema do banco
+├── publico/
+│   └── index.html               # Front-end
 ├── src/
-│   ├── controllers/
-│   ├── services/
-│   ├── routes/
+│   ├── controllers/             # Recebem AS requisições
+│   │   ├── biodiversidade.controller.js
+│   │   ├── eventos.controller.js
+│   │   ├── metricas.controller.js
+│   │   ├── tracking.controller.js
+│   │   └── trilhas.controller.js
+│   ├── services/                # Lógica de negócio e validações
+│   │   ├── biodiversidade.service.js
+│   │   ├── eventos.service.js
+│   │   ├── metricas.service.js
+│   │   ├── tracking.service.js
+│   │   └── trilhas.service.js
+│   ├── routes/                  # Mapeamento de rotas 
+│   │   ├── biodiversidade.routes.js
+│   │   ├── eventos.routes.js
+│   │   ├── metricas.routes.js
+│   │   ├── tracking.routes.js
+│   │   └── trilhas.routes.js
 │   ├── database/
+│   │   └── prisma.js            # Instância do Prisma Client
 │   ├── middlewares/
-│   ├── app.js
-│   └── server.js
-├── .env.example
-├── .gitignore
-└── package.json
-Tecnologias Utilizadas
-Frontend: HTML, CSS, JavaScript
-Backend: Node.js + Express
-Banco de dados: PostgreSQL
-ORM: Prisma
-Como Executar
-1. Clonar o repositório
+│   │   └── errorHandler.js      # Tratamento de erros
+│   ├── app.js                   # Configuração do Express
+│   └── server.js                # Entrada do servidor
+├── test/
+│   └── exemplos.http            # Exemplos de requisições
+├── .env.example                 # Modelo de variáveis de ambiente
+├── package.json
+└── README.md
+```
+
+---
+
+##  Como executar localmente
+
+### Pré-requisitos
+- Node.js 18+
+- PostgreSQL (ou conta no supabase para hoespedar)
+
+### Passo a passo
+
+```bash
+# Clone o repositório
 git clone https://github.com/seu-usuario/circuito_tvo.git
 cd circuito_tvo
+
+# Instalar as dependências
 npm install
-2. Configurar ambiente
+
+# Configurar as variáveis
 cp .env.example .env
+# Incluir no .env a URL da sua base
 
-## Editar:
+# Execute as migrations
+npx prisma migrate dev
 
-DATABASE_URL="postgresql://usuario:senha@localhost:5432/circuito_tvo"
-PORT=3000
-3. Criar banco e rodar migrations
-npm run db:migrate
-4. Popular dados
-npm run seed
-5. Rodar servidor
+# Dados de exemplo
+node data/seed.js
+
+# Inicie o servidor
 npm run dev
+```
 
-## Servidor disponível em:
+Acesse em: **http://localhost:3000**
 
-http://localhost:3000
-Endpoints Principais
-Trilhas
-GET /trails
-GET /trails/:id
-POST /trails
-PUT /trails/:id
-DELETE /trails/:id
-Eventos
-GET /events
-GET /events/:id
-POST /events
-PUT /events/:id
-DELETE /events/:id
-Biodiversidade
-GET /biodiversity
-POST /biodiversity
-Tracking
-POST /tracking
+---
 
-**Exemplo:**
+## Deploy
 
+A API está disponível em produção no Railway:
+
+**https://circuitotvo-production.up.railway.app**
+
+| Endpoint | Descrição |
+|----------|-----------|
+| `GET /health` | Valida se a API está no ar 
+| `GET /trilhas` | Lista todas as trilhas 
+| `GET /eventos` | Lista todos os eventos 
+| `GET /biodiversidade` | Lista animais e plantas 
+| `POST /tracking` | Registra interação do usuário 
+| `GET /metricas/trilhas-mais-vistas` | Trilhas mais acessadas 
+| `GET /metricas/engajamento-eventos` | Engajamento por tipo de evento 
+
+---
+
+## Exemplos de Uso
+
+Abra a pasta `test/exemplos.http` para exemplos das rotas.
+
+**Criar uma trilha:**
+```json
+POST /trilhas
 {
-  "event_type": "view_trail",
-  "entity_id": 1,
-  "entity_type": "trail"
+  "nome": "Trilha da Pedra do Sino",
+  "dificuldade": "dificil",
+  "distancia": 14.5,
+  "localizacao": "Parque Nacional da Serra dos Órgãos, Teresópolis",
+  "descricao": "Uma das trilhas mais desafiadoras da Serra dos Órgãos."
 }
+```
 
-## Métricas
+**Acompanhar métricas de acesso:**
+```json
+POST /tracking
+{
+  "tipo_evento": "view_trail",
+  "entity_id": 1,
+  "entity_tipo": "trilha"
+}
+```
 
-GET /metrics/most-viewed-trails
-GET /metrics/events-engagement
+---
 
-## Objetivo
+## Detalhamento
 
-Desenvolver um MVP funcional que combine backend estruturado com coleta básica de dados, permitindo não apenas a consulta de informações, mas também a análise inicial de uso da aplicação.
-O projeto integra, desde o início, uma abordagem orientada a dados, permitindo que decisões futuras sejam baseadas em métricas reais de uso.
+- Disciplina: Desenvolvimento Web Back-End
+- Instituição: UNIFESO
+- Semestre: 2026/1
+- Situação-Problema: Desafio 1 — Circuito Terê Verde (Teresópolis)

@@ -1,0 +1,212 @@
+### Circuito TVO — Exemplos de Requisições
+### Substitua {{BASE_URL}} pela URL local ou de produção
+### Local:      http://localhost:3000
+### Produção:   https://circuitotvo-production.up.railway.app
+
+@BASE_URL = http://localhost:3000
+
+
+# STATUS
+
+
+### Verificar status da API
+GET {{BASE_URL}}/health
+
+
+
+# TRILHAS
+
+
+### Lista todas as trilhas
+GET {{BASE_URL}}/trilhas
+
+###
+
+### Buscar trilha por ID
+GET {{BASE_URL}}/trilhas/1
+
+###
+
+### Criar nova trilha
+POST {{BASE_URL}}/trilhas
+Content-Type: application/json
+
+{
+  "nome": "Trilha da Pedra do Sino",
+  "dificuldade": "dificil",
+  "distancia": 14.5,
+  "localizacao": "Parque Nacional da Serra dos Órgãos, Teresópolis",
+  "descricao": "Uma das trilhas mais desafiadoras da Serra dos Órgãos. Vista panorâmica para a Baía de Guanabara."
+}
+
+###
+
+### Atualizar trilha
+PUT {{BASE_URL}}/trilhas/1
+Content-Type: application/json
+
+{
+  "dificuldade": "moderado",
+  "distancia": 12.0
+}
+
+###
+
+### Excluir trilha
+DELETE {{BASE_URL}}/trilhas/1
+
+
+
+# EVENTOS
+
+
+### Listar todos os eventos
+GET {{BASE_URL}}/eventos
+
+###
+
+### Buscar evento por ID
+GET {{BASE_URL}}/eventos/1
+
+###
+
+### Criar novo evento
+POST {{BASE_URL}}/eventos
+Content-Type: application/json
+
+{
+  "titulo": "Festival de Birdwatching — Serra dos Órgãos",
+  "data": "2026-08-15T08:00:00Z",
+  "localizacao": "Parque Nacional da Serra dos Órgãos, Teresópolis",
+  "descricao": "Observação de aves com guias especializados. Espécies endêmicas da Mata Atlântica."
+}
+
+###
+
+### Atualizar evento
+PUT {{BASE_URL}}/eventos/1
+Content-Type: application/json
+
+{
+  "titulo": "Festival de Birdwatching 2026 — Edição Especial"
+}
+
+###
+
+### Excluir evento
+DELETE {{BASE_URL}}/eventos/1
+
+
+
+# BIODIVERSIDADE
+
+
+### Listar todas as espécies
+GET {{BASE_URL}}/biodiversidade
+
+###
+
+### Filtrar por tipo (fauna ou flora)
+GET {{BASE_URL}}/biodiversidade?tipo=fauna
+
+###
+
+### Buscar espécie por ID
+GET {{BASE_URL}}/biodiversidade/1
+
+###
+
+### Cadastrar espécie de animal
+POST {{BASE_URL}}/biodiversidade
+Content-Type: application/json
+
+{
+  "nome": "Mico-leão-dourado",
+  "tipo": "fauna",
+  "descricao": "Primata ameaçado de extinção, endêmico da Mata Atlântica fluminense."
+}
+
+###
+
+### Cadastrar espécie de plantas
+POST {{BASE_URL}}/biodiversidade
+Content-Type: application/json
+
+{
+  "nome": "Ipê-amarelo",
+  "tipo": "flora",
+  "descricao": "Árvore símbolo do Brasil. Floresce entre julho e agosto, atraindo polinizadores nativos."
+}
+
+###
+
+### Atualizar espécie
+PUT {{BASE_URL}}/biodiversidade/1
+Content-Type: application/json
+
+{
+  "descricao": "Primata ameaçado criticamente, endêmico da Mata Atlântica fluminense. Símbolo da conservação brasileira."
+}
+
+###
+
+### Excluir espécie
+DELETE {{BASE_URL}}/biodiversidade/1
+
+
+
+# TRACKING
+
+
+### Registro de visualização de trilha
+POST {{BASE_URL}}/tracking
+Content-Type: application/json
+
+{
+  "tipo_evento": "view_trail",
+  "entity_id": 1,
+  "entity_tipo": "trilha"
+}
+
+###
+
+### Registro de clique em evento
+POST {{BASE_URL}}/tracking
+Content-Type: application/json
+
+{
+  "tipo_evento": "click_event",
+  "entity_id": 1,
+  "entity_tipo": "evento"
+}
+
+###
+
+### Registro de visualização de espécie
+
+POST {{BASE_URL}}/tracking
+Content-Type: application/json
+
+{
+  "tipo_evento": "view_biodiversidade",
+  "entity_id": 1,
+  "entity_tipo": "biodiversidade"
+}
+
+
+
+# MÉTRICAS
+
+
+### Trilhas mais visualizadas
+GET {{BASE_URL}}/metricas/trilhas-mais-vistas
+
+###
+
+### Trilhas mais visualizadas
+GET {{BASE_URL}}/metricas/trilhas-mais-vistas?limit=5
+
+###
+
+### Métricas por tipo de evento
+GET {{BASE_URL}}/metricas/engajamento-eventos

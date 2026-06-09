@@ -87,7 +87,7 @@ circuito_tvo/
 ├── publico/
 │   └── index.html               # Front-end
 ├── src/
-│   ├── controllers/             # Recebem AS requisições
+│   ├── controllers/             # Recebem as requisições
 │   │   ├── biodiversidade.controller.js
 │   │   ├── eventos.controller.js
 │   │   ├── metricas.controller.js
@@ -99,7 +99,7 @@ circuito_tvo/
 │   │   ├── metricas.service.js
 │   │   ├── tracking.service.js
 │   │   └── trilhas.service.js
-│   ├── routes/                  # Mapeamento de rotas 
+│   ├── routes/                  # Rotas 
 │   │   ├── biodiversidade.routes.js
 │   │   ├── eventos.routes.js
 │   │   ├── metricas.routes.js
@@ -202,7 +202,7 @@ POST /tracking
 
 ## Detalhamento
 
-- Disciplina: Desenvolvimento Web Back-End
+- Disciplina: Desenvolvimento Back-End
 - Instituição: UNIFESO
 - Semestre: 2026/1
 - Situação-Problema: Desafio 1 — Circuito Terê Verde (Teresópolis)

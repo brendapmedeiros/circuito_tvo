@@ -4,14 +4,14 @@ const prisma = require('./prisma')
 async function seed() {
   console.log('Iniciando seeding do banco de dados...\n')
 
-  // Limpa as tabelas (não alterar)
+  // limpa as tabelas (ordem importa por causa das dependências)
   await prisma.eventos_usuarios.deleteMany()
-  await prisma.Trail.deleteMany()
+  await prisma.trail.deleteMany()
   await prisma.eventos.deleteMany()
   await prisma.biodiversidade.deleteMany()
 
-  // Trilhas
-  const trilhas = await prisma.Trail.createMany({
+  // trilhas
+  const trilhas = await prisma.trail.createMany({
     data: [
       {
         nome: 'Trilha da Pedra Riscada',
@@ -52,21 +52,18 @@ async function seed() {
         data: new Date('2025-07-15T08:00:00Z'),
         localizacao: 'Maricá, RJ',
         descricao: 'Observação de aves com guias especializados. Inscrições abertas.',
-      
       },
       {
         titulo: 'Mutirão de Limpeza das Trilhas',
         data: new Date('2025-06-21T07:00:00Z'),
         localizacao: 'Região Serrana, RJ',
         descricao: 'Evento voluntário de manutenção e limpeza das trilhas ecológicas locais.',
-       
       },
       {
         titulo: 'Seminário de Biodiversidade da Mata Atlântica',
         data: new Date('2025-08-10T09:00:00Z'),
         localizacao: 'Niterói, RJ',
         descricao: 'Palestras de pesquisadores sobre fauna e flora da Mata Atlântica fluminense.',
-    
       },
     ],
   })
@@ -112,16 +109,16 @@ async function seed() {
       { tipo_evento: 'click_event', entity_id: 1, entity_tipo: 'event' },
       { tipo_evento: 'click_event', entity_id: 2, entity_tipo: 'event' },
       { tipo_evento: 'click_event', entity_id: 1, entity_tipo: 'event' },
-      { tipo_evento: 'view_biodiversity', entity_id: 1, entity_tipo: 'biodiversity' },
-      { tipo_evento: 'view_biodiversity', entity_id: 2, entity_tipo: 'biodiversity' },
+      { tipo_evento: 'view_biodiversidade', entity_id: 1, entity_tipo: 'biodiversidade' },
+      { tipo_evento: 'view_biodiversidade', entity_id: 2, entity_tipo: 'biodiversidade' },
     ],
   })
 
   console.log(`Trilhas criadas: ${trilhas.count}`)
-  console.log(` Eventos criados: ${eventos.count}`)
-  console.log(` Espécies criadas: ${biodiversidade.count}`)
-  console.log(` Eventos de tracking criados: 9`)
-  console.log('\n Seeding concluído.')
+  console.log(`Eventos criados: ${eventos.count}`)
+  console.log(`Espécies criadas: ${biodiversidade.count}`)
+  console.log(`Eventos de tracking criados: 9`)
+  console.log('\nSeeding concluído.')
 }
 
 seed()

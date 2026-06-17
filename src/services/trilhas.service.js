@@ -1,6 +1,6 @@
 const prisma = require('../database/prisma')
 
-const dificuldadesValidas = ['facil', 'moderado', 'dificil']
+const dificuldadesValidas = ['facil', 'moderada', 'dificil']
 
 async function findAll() {
   return prisma.trail.findMany({

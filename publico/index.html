@@ -87,22 +87,42 @@
     .col-full { grid-column: 1 / -1; }
     .form-actions { display: flex; gap: 0.5rem; }
 
+    /* cartões das trilhas, eventos e espécies */
     .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.1rem; }
+
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: transform 0.18s ease, box-shadow 0.18s ease; display: flex; flex-direction: column; }
     .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
-    .card-accent { height: 4px; background: linear-gradient(90deg, var(--green-500), var(--green-400)); }
-    .card-accent.fauna    { background: linear-gradient(90deg, #2563eb, #60a5fa); }
-    .card-accent.flora    { background: linear-gradient(90deg, var(--green-500), var(--green-400)); }
-    .card-accent.dificil  { background: linear-gradient(90deg, #dc2626, #f87171); }
-    .card-accent.moderada { background: linear-gradient(90deg, var(--amber-400), #fbbf24); }
-    .card-accent.facil    { background: linear-gradient(90deg, var(--green-500), var(--green-400)); }
-    .card-accent.event    { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+    /* fotos dos cartões */
+    .card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* indicador colorido se não tem foto */
+    .card-img-placeholder {
+      width: 100%;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, var(--green-100), var(--green-200));
+    }
+
+    .card-img-placeholder.fauna  { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+    .card-img-placeholder.dificil { background: linear-gradient(135deg, var(--red-100), #fca5a5); }
+    .card-img-placeholder.moderado { background: linear-gradient(135deg, var(--amber-100), #fde68a); }
+    .card-img-placeholder.event { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+
     .card-body { padding: 1.1rem 1.25rem; flex: 1; display: flex; flex-direction: column; }
     .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem; }
     .card h3 { font-size: 0.98rem; font-weight: 800; line-height: 1.3; }
     .badge { display: inline-flex; align-items: center; font-size: 0.68rem; font-weight: 700; padding: 0.18rem 0.65rem; border-radius: 20px; white-space: nowrap; letter-spacing: 0.3px; text-transform: uppercase; }
     .badge-facil    { background: var(--green-100); color: #1b4332; }
-    .badge-moderada { background: var(--amber-100); color: #78350f; }
+    .badge-moderado { background: var(--amber-100); color: #78350f; }
     .badge-dificil  { background: var(--red-100);   color: #7f1d1d; }
     .badge-fauna    { background: #dbeafe; color: #1e3a8a; }
     .badge-flora    { background: var(--green-100); color: #14532d; }
@@ -112,7 +132,6 @@
     .meta-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px; font-weight: 600; }
     .card-footer { display: flex; gap: 0.4rem; padding-top: 0.85rem; border-top: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
 
-    /* indicador de view (registradas automaticamente) */
     .seen-tag { font-size: 0.72rem; color: var(--green-500); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; opacity: 0; transition: opacity 0.3s ease; }
     .seen-tag.show { opacity: 1; }
 
@@ -152,7 +171,7 @@
     <div class="logo-icon">🌿</div>
     <div>
       <div class="logo-text">Circuito TVO</div>
-      <div class="logo-sub">Ecoturismo & Biodiversidade</div>
+      <div class="logo-sub">Turismo & Biodiversidade — Teresópolis</div>
     </div>
   </div>
   <div class="header-right">
@@ -164,7 +183,7 @@
 </header>
 
 <div class="stats-bar">
-  <div class="stat-item"><strong id="count-trails">—</strong> trilhas cadastradas</div>
+  <div class="stat-item"><strong id="count-trails">—</strong> trilhas</div>
   <div class="stat-item"><strong id="count-events">—</strong> eventos</div>
   <div class="stat-item"><strong id="count-bio">—</strong> espécies</div>
   <div class="stat-item" style="margin-left: auto;">
@@ -181,26 +200,26 @@
 
 <main>
 
-  <!-- TRILHAS -->
+  <!-- trilhas -->
   <section id="tab-trails">
     <div class="section-header">
-      <div><h2>Trilhas</h2><p>Rotas ecológicas cadastradas na plataforma</p></div>
+      <div><h2>Trilhas</h2><p>Rotas ecológicas do PARNASO — Teresópolis</p></div>
       <button class="btn-primary" onclick="toggleForm('form-trail')">+ Nova trilha</button>
     </div>
     <div class="form-card hidden" id="form-trail">
       <div class="form-card-title">Cadastrar nova trilha</div>
       <div class="form-grid">
-        <div class="form-group"><label>Nome *</label><input type="text" id="trail-name" placeholder="Ex: Trilha da Pedra Riscada"></div>
+        <div class="form-group"><label>Nome *</label><input type="text" id="trail-name" placeholder="Ex: Trilha da Pedra do Sino"></div>
         <div class="form-group"><label>Dificuldade *</label>
           <select id="trail-difficulty">
             <option value="">Selecione...</option>
             <option value="facil">Fácil</option>
-            <option value="moderada">Moderada</option>
+            <option value="moderado">Moderado</option>
             <option value="dificil">Difícil</option>
           </select>
         </div>
-        <div class="form-group"><label>Distância (km) *</label><input type="number" id="trail-distance" placeholder="Ex: 4.5" step="0.1" min="0.1"></div>
-        <div class="form-group"><label>Localização *</label><input type="text" id="trail-location" placeholder="Ex: Maricá, RJ"></div>
+        <div class="form-group"><label>Distância (km) *</label><input type="number" id="trail-distance" placeholder="Ex: 11" step="0.1" min="0.1"></div>
+        <div class="form-group"><label>Localização *</label><input type="text" id="trail-location" placeholder="Ex: PARNASO — Teresópolis, RJ"></div>
         <div class="form-group col-full"><label>Descrição</label><textarea id="trail-description" placeholder="Descreva a trilha..."></textarea></div>
       </div>
       <div class="form-actions">
@@ -216,7 +235,7 @@
   <!-- eventos -->
   <section id="tab-events" class="hidden">
     <div class="section-header">
-      <div><h2>Eventos</h2><p>Atividades e eventos ambientais programados</p></div>
+      <div><h2>Eventos</h2><p>Atividades e eventos ambientais na região</p></div>
       <button class="btn-primary" onclick="toggleForm('form-event')">+ Novo evento</button>
     </div>
     <div class="form-card hidden" id="form-event">
@@ -224,7 +243,7 @@
       <div class="form-grid">
         <div class="form-group"><label>Título *</label><input type="text" id="event-title" placeholder="Ex: Festival de Birdwatching"></div>
         <div class="form-group"><label>Data *</label><input type="datetime-local" id="event-date"></div>
-        <div class="form-group"><label>Localização *</label><input type="text" id="event-location" placeholder="Ex: Maricá, RJ"></div>
+        <div class="form-group"><label>Localização *</label><input type="text" id="event-location" placeholder="Ex: PARNASO — Teresópolis, RJ"></div>
         <div class="form-group col-full"><label>Descrição</label><textarea id="event-description" placeholder="Detalhes do evento..."></textarea></div>
       </div>
       <div class="form-actions">
@@ -237,16 +256,16 @@
     <div id="events-empty" class="empty hidden"><div class="empty-icon">📅</div><p>Nenhum evento cadastrado ainda.</p></div>
   </section>
 
-  <!-- biodversidade -->
+  <!-- biodiversidade -->
   <section id="tab-biodiversity" class="hidden">
     <div class="section-header">
-      <div><h2>Biodiversidade</h2><p>Fauna e flora registrada nas regiões mapeadas</p></div>
+      <div><h2>Biodiversidade</h2><p>Fauna e flora do PARNASO</p></div>
       <button class="btn-primary" onclick="toggleForm('form-bio')">+ Nova espécie</button>
     </div>
     <div class="form-card hidden" id="form-bio">
       <div class="form-card-title">Cadastrar espécie</div>
       <div class="form-grid">
-        <div class="form-group"><label>Nome *</label><input type="text" id="bio-name" placeholder="Ex: Mico-leão-dourado"></div>
+        <div class="form-group"><label>Nome *</label><input type="text" id="bio-name" placeholder="Ex: Tucano-de-bico-verde"></div>
         <div class="form-group"><label>Tipo *</label>
           <select id="bio-type">
             <option value="">Selecione...</option>
@@ -254,7 +273,7 @@
             <option value="flora">🌿 Flora</option>
           </select>
         </div>
-        <div class="form-group col-full"><label>Descrição</label><textarea id="bio-description" placeholder="Características, habitat..."></textarea></div>
+        <div class="form-group col-full"><label>Descrição</label><textarea id="bio-description" placeholder="Características, habitat, status de conservação..."></textarea></div>
       </div>
       <div class="form-actions">
         <button class="btn-primary" onclick="createBio()">✓ Salvar espécie</button>
@@ -269,7 +288,7 @@
   <!-- métricas -->
   <section id="tab-metrics" class="hidden">
     <div class="section-header">
-      <div><h2>Métricas de engajamento</h2><p>Dados de tracking e interações dos usuários</p></div>
+      <div><h2>Métricas de engajamento</h2><p>Interações registradas pelos usuários da plataforma</p></div>
       <button class="btn-ghost" onclick="loadMetrics()">↻ Atualizar</button>
     </div>
     <div id="metrics-loading" class="loading"><div class="loading-spinner"></div>Calculando métricas...</div>
@@ -295,7 +314,7 @@
   const TABS = ['trails', 'events', 'biodiversity', 'metrics'];
   let counts = { trails: 0, events: 0, bio: 0 };
 
-  // ---- valida se a api está online ou offline ----
+  // ---- Health check ----
   async function checkApi() {
     try {
       const r = await fetch(API + '/health');
@@ -330,8 +349,7 @@
     } catch { /* silencioso */ }
   }
 
-  //  navegação
-
+  // ---- navegação ----
   function switchTab(tab) {
     document.querySelectorAll('section[id^="tab-"]').forEach(s => s.classList.add('hidden'));
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
@@ -349,7 +367,7 @@
     if (!el.classList.contains('hidden')) el.querySelector('input, select')?.focus();
   }
 
-  // msg de erro/sucesso
+  // ---- msgs de erro ----
   function toast(msg, err = false) {
     const t = document.getElementById('toast');
     t.innerHTML = (err ? '⚠ ' : '✓ ') + msg;
@@ -358,7 +376,7 @@
     t._t = setTimeout(() => { t.className = 'toast'; }, 3000);
   }
 
-  // contabilização para engajamento
+  // ---- engajamento ----
   async function track(tipo_evento, entity_id, entity_tipo) {
     try {
       await fetch(API + '/tracking', {
@@ -371,26 +389,22 @@
     } catch { /* silencioso */ }
   }
 
-  // registra view dos cards
-  const vistos = new Set(); 
+  // registra views pra métricas de engajamento 
+  const vistos = new Set();
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-
       const card = entry.target;
       const chave = card.dataset.trackKey;
       if (vistos.has(chave)) return;
-
       vistos.add(chave);
       track(card.dataset.trackEvento, parseInt(card.dataset.trackId), card.dataset.trackTipo);
-
       const tag = card.querySelector('.seen-tag');
       if (tag) tag.classList.add('show');
-
       observer.unobserve(card);
     });
-  }, { threshold: 0.5 }); // conta como visto quando metade do card aparece na tela
+  }, { threshold: 0.5 });
 
   function observeCards(containerId) {
     document.querySelectorAll(`#${containerId} [data-track-key]`).forEach(card => {
@@ -399,10 +413,19 @@
   }
 
   // nivelamento das trilhas
-  const diffLabel = { facil: 'Fácil', moderada: 'Moderada', dificil: 'Difícil' };
+  const diffLabel = { facil: 'Fácil', moderado: 'Moderado', dificil: 'Difícil' };
+  const diffIcon  = { facil: '🟢', moderado: '🟡', dificil: '🔴' };
   const badge = (cls, label) => `<span class="badge badge-${cls}">${label}</span>`;
   const metaItem = (icon, text) => `<span class="meta-item">${icon} ${text}</span>`;
   const fmtDate = iso => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+  // se não tiver imagem puxa ícone colorido conforme aa dificuldade ou tipo
+  function cardImg(imagem, tipo, emoji) {
+    if (imagem) {
+      return `<img class="card-img" src="/images/${imagem}" alt="" onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder ${tipo}\\'>${emoji}</div>'">`;
+    }
+    return `<div class="card-img-placeholder ${tipo}">${emoji}</div>`;
+  }
 
   function setState(pfx, state) {
     ['loading', 'grid', 'empty', 'content'].forEach(s => {
@@ -421,7 +444,7 @@
       if (!data.length) { setState('trails', 'empty'); return; }
       document.getElementById('trails-grid').innerHTML = data.map(t => `
         <div class="card" data-track-key="trilha-${t.id}" data-track-evento="view_trail" data-track-id="${t.id}" data-track-tipo="trail">
-          <div class="card-accent ${t.dificuldade}"></div>
+          ${cardImg(t.imagem, t.dificuldade, diffIcon[t.dificuldade] || '🥾')}
           <div class="card-body">
             <div class="card-top">
               <h3>${t.nome}</h3>
@@ -433,7 +456,6 @@
             </div>
             ${t.descricao ? `<p class="card-desc">${t.descricao}</p>` : ''}
             <div class="card-footer">
-              <span class="seen-tag">👁 view registrada</span>
               <button class="btn-delete" onclick="deleteTrail(${t.id})" style="margin-left:auto">Excluir</button>
             </div>
           </div>
@@ -483,7 +505,7 @@
       if (!data.length) { setState('events', 'empty'); return; }
       document.getElementById('events-grid').innerHTML = data.map(e => `
         <div class="card" data-track-key="evento-${e.id}" data-track-evento="view_event" data-track-id="${e.id}" data-track-tipo="event">
-          <div class="card-accent event"></div>
+          <div class="card-img-placeholder event">📅</div>
           <div class="card-body">
             <div class="card-top">
               <h3>${e.titulo}</h3>
@@ -495,7 +517,6 @@
             </div>
             ${e.descricao ? `<p class="card-desc">${e.descricao}</p>` : ''}
             <div class="card-footer">
-              <span class="seen-tag">👁 view registrada</span>
               <button class="btn-delete" onclick="deleteEvent(${e.id})" style="margin-left:auto">Excluir</button>
             </div>
           </div>
@@ -537,7 +558,7 @@
     } catch { toast('Erro ao excluir', true); }
   }
 
-  // biodversidade
+  // biodiversidade
   async function loadBio() {
     setState('bio', 'loading');
     try {
@@ -545,7 +566,7 @@
       if (!data.length) { setState('bio', 'empty'); return; }
       document.getElementById('bio-grid').innerHTML = data.map(b => `
         <div class="card" data-track-key="bio-${b.id}" data-track-evento="view_biodiversity" data-track-id="${b.id}" data-track-tipo="biodiversity">
-          <div class="card-accent ${b.tipo}"></div>
+          ${cardImg(b.imagem, b.tipo, b.tipo === 'fauna' ? '🐾' : '🌿')}
           <div class="card-body">
             <div class="card-top">
               <h3>${b.nome}</h3>
@@ -553,7 +574,6 @@
             </div>
             ${b.descricao ? `<p class="card-desc">${b.descricao}</p>` : ''}
             <div class="card-footer">
-              <span class="seen-tag">👁 view registrada</span>
               <button class="btn-delete" onclick="deleteBio(${b.id})" style="margin-left:auto">Excluir</button>
             </div>
           </div>
@@ -582,7 +602,7 @@
   }
 
   async function deleteBio(id) {
-    if (!confirm('Excluir esta espécie?')) return;
+    if (!confirm('Excluir essa espécie?')) return;
     try {
       await fetch(API + '/biodiversidade/' + id, { method: 'DELETE' });
       toast('Espécie excluída.');
@@ -593,7 +613,7 @@
     } catch { toast('Erro ao excluir', true); }
   }
 
-  // calcula métricas
+  // engajamento
   async function loadMetrics() {
     setState('metrics', 'loading');
     try {
@@ -656,7 +676,11 @@
         </div>`).join('');
 
       setState('metrics', 'content');
-    } catch { setState('metrics', 'empty'); toast('Erro ao carregar métricas', true); }
+    } catch (err) {
+      console.error('Erro nas métricas:', err);
+      setState('metrics', 'empty');
+      toast('Erro ao carregar métricas', true);
+    }
   }
 
   checkApi();

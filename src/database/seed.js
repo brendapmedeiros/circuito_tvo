@@ -18,7 +18,7 @@ async function seed() {
         distancia: 11.0,
         localizacao: 'PARNASO — Sede Teresópolis, RJ',
         descricao: 'A trilha mais famosa do Parque Nacional da Serra dos Órgãos. Leva ao ponto culminante da Serra dos Órgãos, a 2.263 metros de altitude. Vista panorâmica para a Baía de Guanabara e o Rio de Janeiro. Duração média de 4 a 6 horas (só ida). Guia obrigatório.',
-       // imagem: 'https://ibb.co/FLFGZc0r',
+        imagem: 'pedra_do_sino.jpeg',
       },
       {
         nome: 'Trilha do Cartão Postal',
@@ -34,7 +34,7 @@ async function seed() {
         distancia: 0.49,
         localizacao: 'PARNASO — Sede Teresópolis, RJ',
         descricao: 'Percurso leve de cerca de 20 minutos, ideal para todas as idades e famílias com crianças. Trilha bem sinalizada por dentro da Mata Atlântica preservada, com aves e plantas nativas ao longo do caminho.',
-        // imagem: 'https://ibb.co/zVVc6pfz',
+        imagem: 'trilha_primavera.jpg',
       },
       {
         nome: 'Trilha Suspensa',
@@ -42,7 +42,7 @@ async function seed() {
         distancia: 0.8,
         localizacao: 'PARNASO — Praça da Barragem, Teresópolis, RJ',
         descricao: 'Grande atração do parque, a trilha suspensa começa na Praça da Barragem. Acessível a cadeirantes e pessoas com mobilidade reduzida. Vista única sobre o dossel da Mata Atlântica.',
-       // imagem: 'https://ibb.co/4Zv35W2g',
+        imagem: 'trilha_suspensa.jpg',
       },
       {
         nome: 'Travessia Petrópolis–Teresópolis',
@@ -58,7 +58,7 @@ async function seed() {
         distancia: 2.5,
         localizacao: 'PARNASO — Sede Teresópolis, RJ',
         descricao: 'Percurso na parte baixa do parque com vistas das formações rochosas da Serra. Indicada para caminhantes com alguma experiência. Passa por floresta montana com grande diversidade de bromélias e orquídeas epífitas.',
-        // imagem: 'https://ibb.co/pFVytKb',
+        imagem: 'trilha_mozart.jpg',
       },
     ],
   })

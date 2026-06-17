@@ -18,7 +18,7 @@ async function seed() {
         distancia: 11.0,
         localizacao: 'PARNASO — Sede Teresópolis, RJ',
         descricao: 'A trilha mais famosa do Parque Nacional da Serra dos Órgãos. Leva ao ponto culminante da Serra dos Órgãos, a 2.263 metros de altitude. Vista panorâmica para a Baía de Guanabara e o Rio de Janeiro. Duração média de 4 a 6 horas (só ida). Guia obrigatório.',
-        imagem: 'pedra_do_sino.jpeg',
+        imagem: 'pedra_do_sino.png',
       },
       {
         nome: 'Trilha do Cartão Postal',
@@ -26,7 +26,7 @@ async function seed() {
         distancia: 1.2,
         localizacao: 'PARNASO — Sede Teresópolis, RJ',
         descricao: 'Trilha íngreme que leva a um mirante com vista do Dedo de Deus, pico de 1.692 metros e símbolo do alpinismo brasileiro. Subida de aproximadamente 50 minutos. Uma das mais fotografadas do parque.',
-        // imagem: 'https://ibb.co/ymmW7rWK',
+        imagem: 'dedo_de_deus.jpeg',
       },
       {
         nome: 'Trilha da Primavera',
@@ -50,7 +50,7 @@ async function seed() {
         distancia: 42.0,
         localizacao: 'PARNASO — Petrópolis a Teresópolis, RJ',
         descricao: 'A travessia mais procurada do PARNASO e uma das mais belas do Brasil. Cerca de 42 km atravessando a parte alta das montanhas, passando pelos Castelos do Açú, Pedra do Sino e Vale das Antas. Duração de 3 dias. Guia obrigatório.',
-       // imagem: 'https://ibb.co/PzzH7Dtc',
+        imagem: 'travessia_petropolis.jpg',
       },
       {
         nome: 'Trilha Mozart Catão',

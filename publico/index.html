@@ -422,7 +422,7 @@
   // se não tiver imagem puxa ícone colorido conforme aa dificuldade ou tipo
   function cardImg(imagem, tipo, emoji) {
     if (imagem) {
-      return `<img class="card-img" src="/images/${imagem}" alt="" onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder ${tipo}\\'>${emoji}</div>'">`;
+      return `<img class="card-img" src="/imagens/${imagem}" alt="" onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder ${tipo}\\'>${emoji}</div>'">`;
     }
     return `<div class="card-img-placeholder ${tipo}">${emoji}</div>`;
   }

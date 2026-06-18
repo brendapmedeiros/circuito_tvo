@@ -36,7 +36,8 @@ Content-Type: application/json
   "dificuldade": "dificil",
   "distancia": 14.5,
   "localizacao": "Parque Nacional da Serra dos Órgãos, Teresópolis",
-  "descricao": "Uma das trilhas mais desafiadoras da Serra dos Órgãos. Vista panorâmica para a Baía de Guanabara."
+  "descricao": "Uma das trilhas mais desafiadoras da Serra dos Órgãos. Vista panorâmica para a Baía de Guanabara.",
+  "imagem": "pedra_do_sino.png"
 }
 
 ###
@@ -123,7 +124,8 @@ Content-Type: application/json
 {
   "nome": "Mico-leão-dourado",
   "tipo": "fauna",
-  "descricao": "Primata ameaçado de extinção, endêmico da Mata Atlântica fluminense."
+  "descricao": "Primata ameaçado de extinção, endêmico da Mata Atlântica fluminense.",
+  "imagem": "mico_leao_dourado.jpg"
 }
 
 ###
@@ -158,6 +160,11 @@ DELETE {{BASE_URL}}/biodiversidade/1
 # TRACKING
 
 
+### Lista os últimos eventos de tracking
+GET {{BASE_URL}}/tracking
+
+###
+
 ### Registro de visualização de trilha
 POST {{BASE_URL}}/tracking
 Content-Type: application/json
@@ -188,7 +195,7 @@ POST {{BASE_URL}}/tracking
 Content-Type: application/json
 
 {
-  "tipo_evento": "view_biodiversidade",
+  "tipo_evento": "view_biodiversity",
   "entity_id": 1,
   "entity_tipo": "biodiversidade"
 }

@@ -4,7 +4,7 @@ const prisma = require('../database/prisma')
 async function getTrilhasMaisVistas(limit = 10) {
   const contagem = await prisma.eventos_usuarios.groupBy({
     by: ['entity_id'],
-    where: { tipo_evento: 'view_trail', entity_tipo: 'trail' },
+    where: { tipo_evento: 'view_trail', entity_tipo: 'trilha' },
     _count: { entity_id: true },
     orderBy: { _count: { entity_id: 'desc' } },
     take: limit,

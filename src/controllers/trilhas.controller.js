@@ -31,7 +31,8 @@ async function create(req, res, next) {
 async function update(req, res, next) {
   try {
     const id = parseInt(req.params.id)
-    const trail = await trilhasService.update(id, req.body)
+    const { nome, dificuldade, distancia, localizacao, descricao, imagem } = req.body
+    const trail = await trilhasService.update(id, { nome, dificuldade, distancia, localizacao, descricao, imagem })
     res.json({ data: trail, message: 'Trilha atualizada.' })
   } catch (error) {
     next(error)

@@ -21,7 +21,7 @@ async function findById(id) {
 }
 
 async function create(data) {
-  const { nome, tipo, descricao } = data
+  const { nome, tipo, descricao, imagem } = data
 
   if (!nome || !tipo) {
     const error = new Error('Campos obrigatórios: nome, tipo')
@@ -35,7 +35,7 @@ async function create(data) {
     throw error
   }
 
-  return prisma.biodiversidade.create({ data: { nome, tipo, descricao } })
+  return prisma.biodiversidade.create({ data: { nome, tipo, descricao, imagem } })
 }
 
 async function update(id, data) {

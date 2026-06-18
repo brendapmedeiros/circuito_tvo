@@ -19,7 +19,7 @@ async function findById(id) {
 }
 
 async function create(data) {
-  const { nome, dificuldade, distancia, localizacao, descricao } = data
+  const { nome, dificuldade, distancia, localizacao, descricao, imagem } = data
 
   if (!nome || !dificuldade || !distancia || !localizacao) {
     const error = new Error('Campos obrigatórios: nome, dificuldade, distancia, localizacao')
@@ -39,7 +39,7 @@ async function create(data) {
     throw error
   }
 
-  return prisma.trail.create({ data: { nome, dificuldade, distancia, localizacao, descricao } })
+  return prisma.trail.create({ data: { nome, dificuldade, distancia, localizacao, descricao, imagem } })
 }
 
 async function update(id, data) {

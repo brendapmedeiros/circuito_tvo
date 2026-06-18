@@ -32,7 +32,8 @@ async function create(req, res, next) {
 async function update(req, res, next) {
   try {
     const id = parseInt(req.params.id)
-    const especie = await biodiversidadeService.update(id, req.body)
+    const { nome, tipo, descricao, imagem } = req.body
+    const especie = await biodiversidadeService.update(id, { nome, tipo, descricao, imagem })
     res.json({ data: especie, message: 'Espécie atualizada.' })
   } catch (error) {
     next(error)

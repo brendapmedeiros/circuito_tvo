@@ -1,5 +1,5 @@
 require('dotenv').config()
-const prisma = require('./prisma')
+const prisma = require('../src/database/prisma')
 
 async function seed() {
   console.log('Iniciando seeding.\n')
@@ -162,12 +162,12 @@ async function seed() {
   // Tracking de exemplo
   await prisma.eventos_usuarios.createMany({
     data: [
-      { tipo_evento: 'view_trail', entity_id: 1, entity_tipo: 'trail' },
-      { tipo_evento: 'view_trail', entity_id: 1, entity_tipo: 'trail' },
-      { tipo_evento: 'view_trail', entity_id: 2, entity_tipo: 'trail' },
-      { tipo_evento: 'view_trail', entity_id: 3, entity_tipo: 'trail' },
-      { tipo_evento: 'view_trail', entity_id: 1, entity_tipo: 'trail' },
-      { tipo_evento: 'view_trail', entity_id: 5, entity_tipo: 'trail' },
+      { tipo_evento: 'view_trail', entity_id: 1, entity_tipo: 'trilha' },
+      { tipo_evento: 'view_trail', entity_id: 1, entity_tipo: 'trilha' },
+      { tipo_evento: 'view_trail', entity_id: 2, entity_tipo: 'trilha' },
+      { tipo_evento: 'view_trail', entity_id: 3, entity_tipo: 'trilha' },
+      { tipo_evento: 'view_trail', entity_id: 1, entity_tipo: 'trilha' },
+      { tipo_evento: 'view_trail', entity_id: 5, entity_tipo: 'trilha' },
       { tipo_evento: 'view_event', entity_id: 1, entity_tipo: 'evento' },
       { tipo_evento: 'view_event', entity_id: 2, entity_tipo: 'evento' },
       { tipo_evento: 'view_event', entity_id: 1, entity_tipo: 'evento' },

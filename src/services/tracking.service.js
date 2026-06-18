@@ -3,7 +3,7 @@
 
 const prisma = require('../database/prisma')
 
-const TIPOS_ENTIDADE_VALIDOS = ['trail', 'eventos', 'biodiversidade']
+const TIPOS_ENTIDADE_VALIDOS = ['trilha', 'evento', 'biodiversidade']
 
 async function registrarEvento(dados) {
   const { tipo_evento, entity_id, entity_tipo } = dados

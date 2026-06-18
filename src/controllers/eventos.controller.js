@@ -31,7 +31,8 @@ async function create(req, res, next) {
 async function update(req, res, next) {
   try {
     const id = parseInt(req.params.id)
-    const event = await eventosService.update(id, req.body)
+    const { titulo, data, localizacao, descricao } = req.body
+    const event = await eventosService.update(id, { titulo, data, localizacao, descricao })
     res.json({ data: event, message: 'Evento atualizado.' })
   } catch (error) {
     next(error)

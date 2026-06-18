@@ -443,7 +443,7 @@
       const { data } = await fetch(API + '/trilhas').then(r => r.json());
       if (!data.length) { setState('trails', 'empty'); return; }
       document.getElementById('trails-grid').innerHTML = data.map(t => `
-        <div class="card" data-track-key="trilha-${t.id}" data-track-evento="view_trail" data-track-id="${t.id}" data-track-tipo="trail">
+        <div class="card" data-track-key="trilha-${t.id}" data-track-evento="view_trail" data-track-id="${t.id}" data-track-tipo="trilha">
           ${cardImg(t.imagem, t.dificuldade, diffIcon[t.dificuldade] || '🥾')}
           <div class="card-body">
             <div class="card-top">
@@ -504,7 +504,7 @@
       const { data } = await fetch(API + '/eventos').then(r => r.json());
       if (!data.length) { setState('events', 'empty'); return; }
       document.getElementById('events-grid').innerHTML = data.map(e => `
-        <div class="card" data-track-key="evento-${e.id}" data-track-evento="view_event" data-track-id="${e.id}" data-track-tipo="event">
+        <div class="card" data-track-key="evento-${e.id}" data-track-evento="view_event" data-track-id="${e.id}" data-track-tipo="evento">
           <div class="card-img-placeholder event">📅</div>
           <div class="card-body">
             <div class="card-top">
@@ -565,7 +565,7 @@
       const { data } = await fetch(API + '/biodiversidade').then(r => r.json());
       if (!data.length) { setState('bio', 'empty'); return; }
       document.getElementById('bio-grid').innerHTML = data.map(b => `
-        <div class="card" data-track-key="bio-${b.id}" data-track-evento="view_biodiversity" data-track-id="${b.id}" data-track-tipo="biodiversity">
+        <div class="card" data-track-key="bio-${b.id}" data-track-evento="view_biodiversity" data-track-id="${b.id}" data-track-tipo="biodiversidade">
           ${cardImg(b.imagem, b.tipo, b.tipo === 'fauna' ? '🐾' : '🌿')}
           <div class="card-body">
             <div class="card-top">
@@ -630,7 +630,7 @@
 
       if (!totalInteracoes && !trilhasData.length) { setState('metrics', 'empty'); return; }
 
-      const bioCount = porTipoEntidade.find(x => x.entity_tipo === 'biodiversity')?.total ?? 0;
+      const bioCount = porTipoEntidade.find(x => x.entity_tipo === 'biodiversidade')?.total ?? 0;
 
       document.getElementById('metrics-kpis').innerHTML = `
         <div class="kpi-card">

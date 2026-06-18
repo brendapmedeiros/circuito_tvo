@@ -167,6 +167,7 @@ A API está disponível em produção no Railway:
 | `GET /eventos` | Lista todos os eventos 
 | `GET /biodiversidade` | Lista animais e plantas 
 | `POST /tracking` | Registra interação do usuário 
+| `GET /tracking` | Lista os últimos eventos de tracking registrados 
 | `GET /metricas/trilhas-mais-vistas` | Trilhas mais acessadas 
 | `GET /metricas/engajamento-eventos` | Engajamento por tipo de evento 
 

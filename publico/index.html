@@ -131,6 +131,31 @@
     .card-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.85rem; }
     .meta-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px; font-weight: 600; }
     .card-footer { display: flex; gap: 0.4rem; padding-top: 0.85rem; border-top: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
+    .card-action { border: 0; background: transparent; color: var(--green-700); font-family: inherit; font-size: 0.8rem; font-weight: 800; cursor: pointer; padding: 0.25rem 0; }
+    .card-action:hover { color: var(--green-900); text-decoration: underline; }
+
+    .filters-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; margin-bottom: 1rem; box-shadow: var(--shadow-sm); }
+    .filters-grid { display: grid; grid-template-columns: 1.4fr repeat(3, minmax(150px, 1fr)); gap: 0.75rem; }
+    .filter-field { display: flex; flex-direction: column; gap: 4px; }
+    .filter-field label { font-size: 0.7rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; }
+    .filter-field input, .filter-field select { border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; font-family: inherit; font-size: 0.86rem; background: var(--surface); color: var(--text-primary); }
+    .filter-field input:focus, .filter-field select:focus { border-color: var(--green-500); outline: none; box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.12); }
+    .event-dashboard { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 0.85rem; margin-bottom: 1rem; }
+    .event-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.9rem 1rem; box-shadow: var(--shadow-sm); }
+    .event-kpi strong { display: block; font-size: 1.45rem; line-height: 1; color: var(--green-700); margin-bottom: 0.25rem; }
+    .event-kpi span { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+    .detail-panel { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--green-500); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1.1rem; box-shadow: var(--shadow-md); }
+    .detail-header { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; margin-bottom: 0.9rem; }
+    .detail-header h3 { font-size: 1.1rem; line-height: 1.3; margin-bottom: 0.35rem; }
+    .detail-text { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.65; margin: 0.9rem 0 1rem; white-space: pre-wrap; }
+    .detail-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    @media (max-width: 850px) {
+      .filters-grid, .event-dashboard { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .cards-grid, .filters-grid, .event-dashboard { grid-template-columns: 1fr; }
+      .section-header, .detail-header { flex-direction: column; }
+    }
 
     .seen-tag { font-size: 0.72rem; color: var(--green-500); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; opacity: 0; transition: opacity 0.3s ease; }
     .seen-tag.show { opacity: 1; }
@@ -251,6 +276,36 @@
         <button class="btn-ghost" onclick="toggleForm('form-event')">Cancelar</button>
       </div>
     </div>
+    <div class="filters-panel">
+      <div class="filters-grid">
+        <div class="filter-field">
+          <label>Buscar por evento</label>
+          <input type="search" id="event-search" placeholder="Digite parte do título" oninput="applyEventFilters()">
+        </div>
+        <div class="filter-field">
+          <label>Categoria</label>
+          <select id="event-category-filter" onchange="applyEventFilters()">
+            <option value="">Todas</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label>Cidade ou local</label>
+          <select id="event-location-filter" onchange="applyEventFilters()">
+            <option value="">Todos</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label>Data</label>
+          <select id="event-date-filter" onchange="applyEventFilters()">
+            <option value="">Todas</option>
+            <option value="proximos">Próximos</option>
+            <option value="passados">Passados</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="event-dashboard" id="event-dashboard"></div>
+    <div id="event-detail" class="detail-panel hidden"></div>
     <div id="events-loading" class="loading"><div class="loading-spinner"></div>Buscando eventos...</div>
     <div id="events-grid" class="cards-grid hidden"></div>
     <div id="events-empty" class="empty hidden"><div class="empty-icon">📅</div><p>Nenhum evento cadastrado ainda.</p></div>
@@ -313,6 +368,7 @@
   const API  = '';
   const TABS = ['trails', 'events', 'biodiversity', 'metrics'];
   let counts = { trails: 0, events: 0, bio: 0 };
+  let eventosCache = [];
 
   // ---- Health check ----
   async function checkApi() {
@@ -418,6 +474,33 @@
   const badge = (cls, label) => `<span class="badge badge-${cls}">${label}</span>`;
   const metaItem = (icon, text) => `<span class="meta-item">${icon} ${text}</span>`;
   const fmtDate = iso => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+  const fmtDateTime = iso => new Date(iso).toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' });
+
+  function normalizar(texto = '') {
+    return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  function categoriaEvento(evento) {
+    const texto = normalizar(`${evento.titulo} ${evento.descricao || ''}`);
+    if (texto.includes('bird') || texto.includes('ave')) return 'Observação de aves';
+    if (texto.includes('limpeza') || texto.includes('mutirao')) return 'Voluntariado';
+    if (texto.includes('corrida') || texto.includes('caminhada') || texto.includes('trilha')) return 'Atividade outdoor';
+    if (texto.includes('seminario') || texto.includes('conservacao') || texto.includes('academico')) return 'Educação ambiental';
+    return 'Evento ambiental';
+  }
+
+  function cidadeEvento(evento) {
+    const local = evento.localizacao || 'Local não informado';
+    const partes = local.split(',').map(p => p.trim()).filter(Boolean);
+    return partes.length > 1 ? partes[partes.length - 2] : local.split('—').pop().trim();
+  }
+
+  function preencherSelect(id, valores) {
+    const select = document.getElementById(id);
+    const atual = select.value;
+    select.innerHTML = '<option value="">Todos</option>' + valores.map(v => `<option value="${v}">${v}</option>`).join('');
+    select.value = valores.includes(atual) ? atual : '';
+  }
 
   // se não tiver imagem puxa ícone colorido conforme aa dificuldade ou tipo
   function cardImg(imagem, tipo, emoji) {
@@ -501,29 +584,135 @@
   async function loadEvents() {
     setState('events', 'loading');
     try {
-      const { data } = await fetch(API + '/eventos').then(r => r.json());
-      if (!data.length) { setState('events', 'empty'); return; }
-      document.getElementById('events-grid').innerHTML = data.map(e => `
-        <div class="card" data-track-key="evento-${e.id}" data-track-evento="view_event" data-track-id="${e.id}" data-track-tipo="evento">
-          <div class="card-img-placeholder event">📅</div>
-          <div class="card-body">
-            <div class="card-top">
-              <h3>${e.titulo}</h3>
-              ${badge('event', 'Evento')}
-            </div>
-            <div class="card-meta">
-              ${metaItem('📅', fmtDate(e.data))}
-              ${metaItem('📍', e.localizacao)}
-            </div>
-            ${e.descricao ? `<p class="card-desc">${e.descricao}</p>` : ''}
-            <div class="card-footer">
-              <button class="btn-delete" onclick="deleteEvent(${e.id})" style="margin-left:auto">Excluir</button>
-            </div>
-          </div>
-        </div>`).join('');
-      setState('events', 'grid');
-      observeCards('events-grid');
+      const r = await fetch(API + '/eventos');
+      if (!r.ok) throw new Error('Erro ao buscar eventos');
+      const { data } = await r.json();
+
+      eventosCache = data || [];
+      atualizarFiltrosEventos();
+      renderEventDashboard(eventosCache);
+      applyEventFilters();
     } catch { setState('events', 'empty'); toast('Erro ao carregar eventos', true); }
+  }
+
+  function atualizarFiltrosEventos() {
+    const categorias = [...new Set(eventosCache.map(categoriaEvento))].sort();
+    const locais = [...new Set(eventosCache.map(cidadeEvento))].sort();
+    preencherSelect('event-category-filter', categorias);
+    preencherSelect('event-location-filter', locais);
+  }
+
+  function applyEventFilters() {
+    const busca = normalizar(document.getElementById('event-search').value);
+    const categoria = document.getElementById('event-category-filter').value;
+    const local = document.getElementById('event-location-filter').value;
+    const periodo = document.getElementById('event-date-filter').value;
+    const hoje = new Date();
+
+    const filtrados = eventosCache.filter(evento => {
+      const tituloOk = normalizar(evento.titulo).includes(busca);
+      const categoriaOk = !categoria || categoriaEvento(evento) === categoria;
+      const localOk = !local || cidadeEvento(evento) === local;
+      const dataEvento = new Date(evento.data);
+      const dataOk = !periodo || (periodo === 'proximos' ? dataEvento >= hoje : dataEvento < hoje);
+      return tituloOk && categoriaOk && localOk && dataOk;
+    });
+
+    renderEventDashboard(filtrados);
+    renderEvents(filtrados);
+  }
+
+  function renderEvents(data) {
+    const detalhe = document.getElementById('event-detail');
+    if (detalhe) detalhe.classList.add('hidden');
+
+    if (!data.length) {
+      setState('events', 'empty');
+      return;
+    }
+
+    document.getElementById('events-grid').innerHTML = data.map(e => `
+      <div class="card" onclick="openEventDetail(${e.id})" data-track-key="evento-${e.id}" data-track-evento="view_event" data-track-id="${e.id}" data-track-tipo="evento">
+        <div class="card-img-placeholder event">Evento</div>
+        <div class="card-body">
+          <div class="card-top">
+            <h3>${e.titulo}</h3>
+            ${badge('event', categoriaEvento(e))}
+          </div>
+          <div class="card-meta">
+            ${metaItem('Data:', fmtDate(e.data))}
+            ${metaItem('Local:', e.localizacao)}
+          </div>
+          ${e.descricao ? `<p class="card-desc">${e.descricao}</p>` : '<p class="card-desc">Sem descrição cadastrada.</p>'}
+          <div class="card-footer">
+            <button class="card-action" onclick="event.stopPropagation(); openEventDetail(${e.id})">Ver detalhes</button>
+            <span class="seen-tag">visualizado</span>
+            <button class="btn-delete" onclick="event.stopPropagation(); deleteEvent(${e.id})" style="margin-left:auto">Excluir</button>
+          </div>
+        </div>
+      </div>`).join('');
+    setState('events', 'grid');
+    observeCards('events-grid');
+  }
+
+  function renderEventDashboard(data) {
+    const proximos = data.filter(e => new Date(e.data) >= new Date()).length;
+    const categorias = new Set(data.map(categoriaEvento)).size;
+    const locais = new Set(data.map(cidadeEvento)).size;
+
+    document.getElementById('event-dashboard').innerHTML = `
+      <div class="event-kpi"><strong>${data.length}</strong><span>eventos exibidos</span></div>
+      <div class="event-kpi"><strong>${proximos}</strong><span>próximos eventos</span></div>
+      <div class="event-kpi"><strong>${categorias}</strong><span>categorias</span></div>
+      <div class="event-kpi"><strong>${locais}</strong><span>locais</span></div>`;
+  }
+
+  function openEventDetail(id) {
+    const evento = eventosCache.find(e => e.id === id);
+    if (!evento) return;
+
+    const painel = document.getElementById('event-detail');
+    painel.innerHTML = `
+      <div class="detail-header">
+        <div>
+          <h3>${evento.titulo}</h3>
+          <div class="card-meta">
+            ${metaItem('Categoria:', categoriaEvento(evento))}
+            ${metaItem('Data:', fmtDateTime(evento.data))}
+            ${metaItem('Local:', evento.localizacao)}
+            ${metaItem('Organizador:', 'Não informado')}
+          </div>
+        </div>
+        <button class="btn-ghost" onclick="closeEventDetail()">Fechar</button>
+      </div>
+      <div class="detail-text">${evento.descricao || 'Sem descrição cadastrada.'}</div>
+      <div class="detail-actions">
+        <button class="btn-primary" onclick="shareEvent(${evento.id})">Compartilhar</button>
+        <button class="btn-ghost" onclick="closeEventDetail()">Voltar para eventos</button>
+      </div>`;
+    painel.classList.remove('hidden');
+    painel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function closeEventDetail() {
+    document.getElementById('event-detail').classList.add('hidden');
+  }
+
+  async function shareEvent(id) {
+    const evento = eventosCache.find(e => e.id === id);
+    if (!evento) return;
+
+    const texto = `${evento.titulo} - ${fmtDateTime(evento.data)} - ${evento.localizacao}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: evento.titulo, text: texto, url: location.href });
+      } else {
+        await navigator.clipboard.writeText(`${texto}\n${location.href}`);
+        toast('Link do evento copiado.');
+      }
+    } catch {
+      toast('Não foi possível compartilhar agora.', true);
+    }
   }
 
   async function createEvent() {

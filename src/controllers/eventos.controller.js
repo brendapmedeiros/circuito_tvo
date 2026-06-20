@@ -1,5 +1,13 @@
 const eventosService = require('../services/eventos.service')
 
+function validarId(id) {
+  if (Number.isNaN(id)) {
+    const error = new Error('ID inválido')
+    error.statusCode = 400
+    throw error
+  }
+}
+
 async function getAll(req, res, next) {
   try {
     const eventos = await eventosService.findAll()
@@ -12,6 +20,7 @@ async function getAll(req, res, next) {
 async function getById(req, res, next) {
   try {
     const id = parseInt(req.params.id)
+    validarId(id)
     const event = await eventosService.findById(id)
     res.json({ data: event })
   } catch (error) {
@@ -31,6 +40,7 @@ async function create(req, res, next) {
 async function update(req, res, next) {
   try {
     const id = parseInt(req.params.id)
+    validarId(id)
     const { titulo, data, localizacao, descricao } = req.body
     const event = await eventosService.update(id, { titulo, data, localizacao, descricao })
     res.json({ data: event, message: 'Evento atualizado.' })
@@ -42,6 +52,7 @@ async function update(req, res, next) {
 async function remove(req, res, next) {
   try {
     const id = parseInt(req.params.id)
+    validarId(id)
     await eventosService.remove(id)
     res.json({ message: 'Evento removido.' })
   } catch (error) {

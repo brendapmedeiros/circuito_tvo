@@ -38,17 +38,21 @@ async function create(body) {
 async function update(id, body) {
   await findById(id)
 
-  if (body.data) {
-    const parsedDate = new Date(body.data)
+  const dados = Object.fromEntries(
+    Object.entries(body).filter(([, valor]) => valor !== undefined)
+  )
+
+  if (dados.data) {
+    const parsedDate = new Date(dados.data)
     if (isNaN(parsedDate.getTime())) {
       const error = new Error('Formato de data inválido.')
       error.statusCode = 400
       throw error
     }
-    body.data = parsedDate
+    dados.data = parsedDate
   }
 
-  return prisma.eventos.update({ where: { id }, data: body })
+  return prisma.eventos.update({ where: { id }, data: dados })
 }
 
 async function remove(id) {

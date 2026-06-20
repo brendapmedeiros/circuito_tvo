@@ -24,12 +24,15 @@ A proposta do **Circuito Terê Verde** é criar uma plataforma que centralize in
 
 ## Descrição do MVP
 
-O **Circuito TVO** é uma API REST que centraliza o gerenciamento de informações sobre ecoturismo e biodiversidade. O sistema permite cadastrar e consultar trilhas, eventos ambientais e espécies de animais e plantas, além de registrar e analisar o comportamento dos usuários por um módulo de acompanhamento.
+O **Circuito TVO** é uma API REST com uma interface web simples para centralizar informações sobre ecoturismo e biodiversidade em Teresópolis. O sistema permite cadastrar e consultar trilhas, eventos ambientais e espécies de animais e plantas, além de registrar e analisar o comportamento dos usuários por um módulo de acompanhamento.
+
+Na interface, os eventos podem ser pesquisados e filtrados por nome, categoria, local e período. Também há um painel de detalhes para cada evento e um mini dashboard com dados gerais da listagem.
 
 **Stack:**
 - Node.js + Express
 - PostgreSQL (Supabase)
 - Prisma ORM
+- HTML, CSS e JavaScript
 - Deploy no Railway
 
 ---
@@ -154,6 +157,21 @@ Acesse em: **http://localhost:3000**
 
 ---
 
+## Scripts principais
+
+| Comando | Descrição |
+|----------|-----------|
+| `npm run dev` | Inicia o servidor com nodemon |
+| `npm start` | Inicia o servidor com node |
+| `npm run db:generate` | Gera o Prisma Client |
+| `npm run db:migrate` | Executa migrations em ambiente local |
+| `npm run db:push` | Sincroniza o schema com o banco |
+| `npm run db:studio` | Abre o Prisma Studio |
+| `npm run seed` | Recria os dados iniciais |
+| `npm test` | Roda os testes de API |
+
+---
+
 ## Deploy
 
 A API está disponível em produção no Railway:
@@ -198,6 +216,37 @@ POST /tracking
   "entity_tipo": "trilha"
 }
 ```
+
+---
+
+## Testes
+
+O projeto possui testes simples de API usando o test runner nativo do Node.js.
+
+Para rodar:
+
+```bash
+npm test
+```
+
+Os testes verificam:
+
+- health check da API;
+- listagem de trilhas;
+- carregamento das imagens das trilhas;
+- métricas de trilhas mais vistas;
+- métricas de engajamento.
+
+---
+
+## Melhorias futuras
+
+- Adicionar autenticação para separar usuário comum e administrador.
+- Criar upload real de imagens.
+- Incluir campos próprios para categoria e organizador dos eventos.
+- Adicionar paginação nas listagens.
+- Melhorar filtros diretamente pela API.
+- Criar testes para criação, edição e exclusão.
 
 ---
 

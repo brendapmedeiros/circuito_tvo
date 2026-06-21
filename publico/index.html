@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Circuito TVO — Ecoturismo & Biodiversidade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -135,7 +135,7 @@
     .badge-flora    { background: var(--green-100); color: #14532d; }
     .badge-event    { background: #ede9fe; color: #4c1d95; }
     .card-desc { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.85rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .bio-desc { -webkit-line-clamp: unset; display: block; overflow: visible; }
+    .bio-desc, .evento-desc { -webkit-line-clamp: unset; display: block; overflow: visible; }
     .card-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.85rem; }
     .meta-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px; font-weight: 600; }
     .card-footer { display: flex; gap: 0.4rem; padding-top: 0.85rem; border-top: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
@@ -194,6 +194,271 @@
     .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--green-800); color: white; padding: 0.75rem 1.25rem; border-radius: var(--radius-md); font-size: 0.875rem; font-weight: 600; z-index: 999; opacity: 0; transform: translateY(12px); transition: opacity 0.2s ease, transform 0.2s ease; display: flex; align-items: center; gap: 8px; max-width: 320px; box-shadow: var(--shadow-lg); }
     .toast.show { opacity: 1; transform: translateY(0); }
     .toast.error { background: var(--red-500); }
+
+    /* Ajuste visual final inspirado no layout de referência */
+    :root {
+      --green-900: #07110b;
+      --green-800: #0f1c14;
+      --green-700: #d4a017;
+      --green-500: #d4a017;
+      --green-400: #e8b820;
+      --green-200: #243625;
+      --green-100: rgba(212,160,23,.14);
+      --green-50:  #101a12;
+      --amber-400: #d4a017;
+      --amber-100: rgba(212,160,23,.15);
+      --red-500:   #f05454;
+      --red-100:   rgba(240,84,84,.16);
+      --surface:   #0f1c14;
+      --bg:        #080f0a;
+      --border:    rgba(255,255,255,.08);
+      --border-md: rgba(255,255,255,.14);
+      --text-primary:   #deeade;
+      --text-secondary: #9eb79f;
+      --text-muted:     #638066;
+      --shadow-sm: 0 1px 0 rgba(255,255,255,.03), 0 8px 18px rgba(0,0,0,.18);
+      --shadow-md: 0 14px 32px rgba(0,0,0,.28);
+      --shadow-lg: 0 18px 48px rgba(0,0,0,.38);
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 124px;
+      padding: 1.4rem 1.2rem;
+      align-items: flex-start;
+      flex-direction: column;
+      justify-content: flex-start;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      box-shadow: none;
+    }
+
+    .logo-icon {
+      background: var(--amber-400);
+      color: #101407;
+      border-radius: 5px;
+      width: 30px;
+      height: 30px;
+    }
+
+    .logo-text { color: var(--text-primary); }
+    .logo-sub { color: var(--text-muted); opacity: 1; text-transform: uppercase; letter-spacing: .45px; }
+    .header-right { margin-top: .7rem; }
+    .api-pill { border-color: var(--border); background: rgba(255,255,255,.04); color: var(--text-muted); }
+    .dot { background: #22c55e; }
+
+    nav {
+      position: fixed;
+      top: 124px;
+      left: 0;
+      bottom: 138px;
+      width: 220px;
+      z-index: 90;
+      padding: .65rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      border-bottom: 0;
+    }
+
+    nav button {
+      width: 100%;
+      justify-content: flex-start;
+      border-bottom: 0;
+      border-left: 3px solid transparent;
+      padding: .68rem 1.2rem;
+      color: var(--text-secondary);
+      font-weight: 700;
+    }
+
+    nav button:hover {
+      background: #172217;
+      color: var(--text-primary);
+    }
+
+    nav button.active {
+      background: #172217;
+      color: var(--amber-400);
+      border-left-color: var(--amber-400);
+    }
+
+    nav button .tab-count {
+      margin-left: auto;
+      background: #1e2d22;
+      color: var(--text-secondary);
+    }
+
+    nav button.active .tab-count {
+      background: rgba(212,160,23,.16);
+      color: var(--amber-400);
+    }
+
+    .stats-bar {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 220px;
+      z-index: 90;
+      padding: 1rem 1.2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .75rem;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      border-top: 1px solid var(--border);
+      border-bottom: 0;
+    }
+
+    .stat-item {
+      display: block;
+      padding: 0;
+      font-size: .7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .35px;
+    }
+
+    .stat-item strong {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1;
+      color: var(--amber-400) !important;
+      margin-bottom: .18rem;
+    }
+
+    main {
+      max-width: none;
+      margin: 0 0 0 220px;
+      padding: 2rem 2.5rem;
+    }
+
+    .section-header {
+      align-items: flex-end;
+      padding-bottom: 1.15rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.45rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.5rem;
+      letter-spacing: -.4px;
+      color: var(--text-primary);
+    }
+
+    .btn-primary {
+      background: var(--amber-400);
+      color: #121407;
+      border-radius: 5px;
+    }
+
+    .btn-primary:hover { background: var(--green-400); }
+    .btn-ghost { border-color: var(--border-md); color: var(--text-secondary); border-radius: 5px; }
+    .btn-ghost:hover { background: #172217; color: var(--amber-400); border-color: rgba(212,160,23,.32); }
+    .btn-delete { border-color: rgba(240,84,84,.25); color: #ff8b8b; }
+
+    .form-card,
+    .card,
+    .filters-panel,
+    .event-kpi,
+    .detail-panel,
+    .kpi-card,
+    .chart-card {
+      background: var(--surface);
+      border-color: var(--border);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .form-card { border-top-color: var(--amber-400); }
+    .form-card-title { color: var(--amber-400); border-bottom-color: var(--border); }
+    .form-group input,
+    .form-group select,
+    .form-group textarea,
+    .filter-field input,
+    .filter-field select {
+      background: #0b150f;
+      color: var(--text-primary);
+      border-color: var(--border-md);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus,
+    .filter-field input:focus,
+    .filter-field select:focus {
+      border-color: var(--amber-400);
+      box-shadow: 0 0 0 3px rgba(212,160,23,.12);
+    }
+
+    .card { border-radius: 10px; }
+    .card:hover { box-shadow: var(--shadow-md); }
+    .card-img-placeholder.event { background: linear-gradient(135deg, #241b35, #3a2c4d); }
+    .event-cover-icon { background: rgba(255,255,255,.08); border-color: rgba(212,160,23,.28); }
+    .event-cover-icon::before { border-color: var(--amber-400); background: linear-gradient(to bottom, var(--amber-400) 0 7px, transparent 7px); }
+    .badge { border-radius: 4px; }
+    .badge-event, .badge-fauna, .badge-flora, .badge-facil, .badge-moderado, .badge-dificil {
+      background: rgba(212,160,23,.13);
+      color: var(--amber-400);
+    }
+    .meta-item, .bar-track { background: #0b150f; border-color: var(--border); }
+    .bar-fill { background: var(--amber-400); color: #141607; }
+    .kpi-value, .event-kpi strong { color: var(--amber-400); }
+    .toast { background: #172217; border: 1px solid var(--border-md); }
+
+    @media (max-width: 760px) {
+      header {
+        position: sticky;
+        width: 100%;
+        height: auto;
+        min-height: 68px;
+        padding: .9rem 1rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .header-right { margin-top: 0; }
+      .stats-bar { display: none; }
+      nav {
+        top: auto;
+        bottom: 0;
+        width: 100%;
+        height: 62px;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0;
+        border-right: 0;
+        border-top: 1px solid var(--border);
+      }
+
+      nav button {
+        justify-content: center;
+        align-items: center;
+        border-left: 0;
+        border-top: 3px solid transparent;
+        padding: .4rem .25rem;
+        font-size: .72rem;
+        flex-direction: column;
+        gap: 1px;
+      }
+
+      nav button.active { border-top-color: var(--amber-400); }
+      nav button .tab-count { display: none; }
+      main { margin: 0; padding: 1rem 1rem 5.2rem; }
+    }
+
     .hidden { display: none !important; }
   </style>
 </head>
@@ -225,10 +490,10 @@
 </div>
 
 <nav>
-  <button class="active" onclick="switchTab('trails')">🥾 Trilhas <span class="tab-count" id="tc-trails">0</span></button>
-  <button onclick="switchTab('events')">📅 Eventos <span class="tab-count" id="tc-events">0</span></button>
-  <button onclick="switchTab('biodiversity')">🦜 Biodiversidade <span class="tab-count" id="tc-bio">0</span></button>
-  <button onclick="switchTab('metrics')">📊 Métricas</button>
+  <button class="active" onclick="switchTab('trails')">Trilhas <span class="tab-count" id="tc-trails">0</span></button>
+  <button onclick="switchTab('events')">Eventos <span class="tab-count" id="tc-events">0</span></button>
+  <button onclick="switchTab('biodiversity')">Biodiversidade <span class="tab-count" id="tc-bio">0</span></button>
+  <button onclick="switchTab('metrics')">Métricas</button>
 </nav>
 
 <main>
@@ -358,8 +623,8 @@
     <div id="metrics-content" class="hidden">
       <div class="metrics-kpis" id="metrics-kpis"></div>
       <div class="charts-grid">
-        <div class="chart-card"><div class="chart-title">🥾 Trilhas mais visualizadas</div><div id="chart-trails"></div></div>
-        <div class="chart-card"><div class="chart-title">📊 Interações por tipo</div><div id="chart-engagement"></div></div>
+        <div class="chart-card"><div class="chart-title">Trilhas mais visualizadas</div><div id="chart-trails"></div></div>
+        <div class="chart-card"><div class="chart-title">Interações por tipo</div><div id="chart-engagement"></div></div>
       </div>
     </div>
     <div id="metrics-empty" class="empty hidden">
@@ -483,6 +748,12 @@
   const metaItem = (icon, text) => `<span class="meta-item">${icon} ${text}</span>`;
   const fmtDate = iso => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
   const fmtDateTime = iso => new Date(iso).toLocaleString('pt-BR', { dateStyle: 'medium', timeStyle: 'short' });
+  const labelTipoEvento = {
+    view_trail: 'Visualizações de trilhas',
+    view_event: 'Visualizações de eventos',
+    view_biodiversity: 'Visualizações de biodiversidade',
+    click_event: 'Cliques nos eventos',
+  };
 
   function normalizar(texto = '') {
     return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -490,8 +761,8 @@
 
   function categoriaEvento(evento) {
     const texto = normalizar(`${evento.titulo} ${evento.descricao || ''}`);
-    if (texto.includes('bird') || texto.includes('ave')) return 'Observação de aves';
     if (texto.includes('limpeza') || texto.includes('mutirao')) return 'Voluntariado';
+    if (texto.includes('bird') || /\baves?\b/.test(texto)) return 'Observação de aves';
     if (texto.includes('corrida') || texto.includes('caminhada') || texto.includes('trilha')) return 'Atividade outdoor';
     if (texto.includes('seminario') || texto.includes('conservacao') || texto.includes('academico')) return 'Educação ambiental';
     return 'Evento ambiental';
@@ -660,7 +931,7 @@
             ${metaItem('Data:', fmtDate(e.data))}
             ${metaItem('Local:', e.localizacao)}
           </div>
-          ${e.descricao ? `<p class="card-desc">${e.descricao}</p>` : '<p class="card-desc">Sem descrição cadastrada.</p>'}
+          ${e.descricao ? `<p class="card-desc evento-desc">${e.descricao}</p>` : '<p class="card-desc evento-desc">Sem descrição cadastrada.</p>'}
           <div class="card-footer">
             <button class="card-action" onclick="event.stopPropagation(); openEventDetail(${e.id})">Ver detalhes</button>
             <span class="seen-tag">visualizado</span>
@@ -875,7 +1146,7 @@
       const maxE   = porTipoEvento.length ? Math.max(...porTipoEvento.map(e => e.total)) : 1;
       document.getElementById('chart-engagement').innerHTML = porTipoEvento.map((e, i) => `
         <div class="bar-row">
-          <span class="bar-label" title="${e.tipo_evento}">${e.tipo_evento}</span>
+          <span class="bar-label" title="${labelTipoEvento[e.tipo_evento] || e.tipo_evento}">${labelTipoEvento[e.tipo_evento] || e.tipo_evento}</span>
           <div class="bar-track">
             <div class="bar-fill ${colors[i % colors.length]}" style="width:${Math.round(e.total / maxE * 100)}%">${e.total}</div>
           </div>

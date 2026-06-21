@@ -135,7 +135,7 @@
     .badge-flora    { background: var(--green-100); color: #14532d; }
     .badge-event    { background: #ede9fe; color: #4c1d95; }
     .card-desc { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.85rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .bio-desc, .evento-desc { -webkit-line-clamp: unset; display: block; overflow: visible; }
+    .bio-desc, .evento-desc, .trilha-desc { -webkit-line-clamp: unset; display: block; overflow: visible; }
     .card-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.85rem; }
     .meta-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px; font-weight: 600; }
     .card-footer { display: flex; gap: 0.4rem; padding-top: 0.85rem; border-top: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
@@ -825,7 +825,7 @@
               ${metaItem('Local:', t.localizacao)}
               ${metaItem('Distância:', t.distancia + ' km')}
             </div>
-            ${t.descricao ? `<p class="card-desc">${t.descricao}</p>` : ''}
+            ${t.descricao ? `<p class="card-desc trilha-desc">${t.descricao}</p>` : ''}
             <div class="card-footer">
               <button class="btn-delete" onclick="deleteTrail(${t.id})" style="margin-left:auto">Excluir</button>
             </div>

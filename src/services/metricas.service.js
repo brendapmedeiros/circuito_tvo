@@ -19,10 +19,12 @@ async function getTrilhasMaisVistas(limit = 10) {
 
   const trilhaMap = Object.fromEntries(trilhas.map((t) => [t.id, t]))
 
-  return contagem.map((v) => ({
-    trilha: trilhaMap[v.entity_id] || null,
-    total_visualizacoes: v._count.entity_id,
-  }))
+  return contagem
+    .filter((v) => trilhaMap[v.entity_id])
+    .map((v) => ({
+      trilha: trilhaMap[v.entity_id],
+      total_visualizacoes: v._count.entity_id,
+    }))
 }
 
 async function getEngajamentoEventos() {

@@ -100,6 +100,9 @@
       object-fit: cover;
       display: block;
     }
+    .card-img.pos-top { object-position: center top; }
+    .card-img.pos-center { object-position: center center; }
+    .card-img.pos-left { object-position: left center; }
 
     /* indicador colorido se não tem foto */
     .card-img-placeholder {
@@ -128,6 +131,7 @@
     .badge-flora    { background: var(--green-100); color: #14532d; }
     .badge-event    { background: #ede9fe; color: #4c1d95; }
     .card-desc { font-size: 0.83rem; color: var(--text-secondary); line-height: 1.55; margin-bottom: 0.85rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .bio-desc { -webkit-line-clamp: unset; display: block; overflow: visible; }
     .card-meta { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.85rem; }
     .meta-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--text-muted); background: var(--bg); border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px; font-weight: 600; }
     .card-footer { display: flex; gap: 0.4rem; padding-top: 0.85rem; border-top: 1px solid var(--border); flex-wrap: wrap; align-items: center; }
@@ -356,7 +360,7 @@
     </div>
     <div id="metrics-empty" class="empty hidden">
       <div class="empty-icon">📊</div>
-      <p>Nenhuma interação registrada ainda.<br>Navegue pelas trilhas e espécies para gerar dados!</p>
+      <p>Nenhuma interação registrada ainda.</p>
     </div>
   </section>
 
@@ -370,7 +374,7 @@
   let counts = { trails: 0, events: 0, bio: 0 };
   let eventosCache = [];
 
-  // ---- Health check ----
+  // ---- on/off check ----
   async function checkApi() {
     try {
       const r = await fetch(API + '/health');
@@ -503,11 +507,20 @@
   }
 
   // se não tiver imagem puxa ícone colorido conforme aa dificuldade ou tipo
-  function cardImg(imagem, tipo, emoji) {
+  function cardImg(imagem, tipo, emoji, classeExtra = '') {
     if (imagem) {
-      return `<img class="card-img" src="/imagens/${imagem}" alt="" onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder ${tipo}\\'>${emoji}</div>'">`;
+      return `<img class="card-img ${classeExtra}" src="/imagens/${imagem}" alt="" onerror="this.parentElement.innerHTML='<div class=\\'card-img-placeholder ${tipo}\\'>${emoji}</div>'">`;
     }
     return `<div class="card-img-placeholder ${tipo}">${emoji}</div>`;
+  }
+
+  function classeImagemBio(imagem) {
+    const posicoes = {
+      'jaguatirica.jpg': 'pos-top',
+      'macaco_prego.jpg': 'pos-top',
+      'mico_leao_dourado.jpg': 'pos-top',
+    };
+    return posicoes[imagem] || 'pos-center';
   }
 
   function setState(pfx, state) {
@@ -755,13 +768,13 @@
       if (!data.length) { setState('bio', 'empty'); return; }
       document.getElementById('bio-grid').innerHTML = data.map(b => `
         <div class="card" data-track-key="bio-${b.id}" data-track-evento="view_biodiversity" data-track-id="${b.id}" data-track-tipo="biodiversidade">
-          ${cardImg(b.imagem, b.tipo, b.tipo === 'fauna' ? '🐾' : '🌿')}
+          ${cardImg(b.imagem, b.tipo, b.tipo === 'fauna' ? '🐾' : '🌿', classeImagemBio(b.imagem))}
           <div class="card-body">
             <div class="card-top">
               <h3>${b.nome}</h3>
               ${badge(b.tipo, b.tipo === 'fauna' ? '🐾 Fauna' : '🌿 Flora')}
             </div>
-            ${b.descricao ? `<p class="card-desc">${b.descricao}</p>` : ''}
+            ${b.descricao ? `<p class="card-desc bio-desc">${b.descricao}</p>` : ''}
             <div class="card-footer">
               <button class="btn-delete" onclick="deleteBio(${b.id})" style="margin-left:auto">Excluir</button>
             </div>
@@ -847,7 +860,7 @@
       document.getElementById('chart-trails').innerHTML = trilhasData.length
         ? trilhasData.map(t => `
           <div class="bar-row">
-            <span class="bar-label" title="${t.trilha?.nome}">${t.trilha?.nome || '#' + t.trilha?.id}</span>
+            <span class="bar-label" title="${t.trilha?.nome || 'Trilha removida'}">${t.trilha?.nome || 'Trilha removida'}</span>
             <div class="bar-track">
               <div class="bar-fill" style="width:${Math.round(t.total_visualizacoes / maxT * 100)}%">${t.total_visualizacoes}</div>
             </div>

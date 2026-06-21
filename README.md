@@ -37,6 +37,22 @@ Na interface, os eventos podem ser pesquisados e filtrados por nome, categoria, 
 
 ---
 
+## Screenshots
+
+### Trilhas
+![Tela de trilhas](docs/prints/trilhas.png)
+
+### Eventos
+![Tela de eventos](docs/prints/eventos.png)
+
+### Biodiversidade
+![Tela de biodiversidade](docs/prints/biodiversidade.png)
+
+### Métricas
+![Tela de métricas](docs/prints/metricas.png)
+
+---
+
 ## Requisitos Funcionais
 
 | ID | Requisito |

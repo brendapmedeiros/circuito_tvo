@@ -466,7 +466,7 @@
 
 <header>
   <div class="logo">
-    <div class="logo-icon">🌿</div>
+    <div class="logo-icon">TVO</div>
     <div>
       <div class="logo-text">Circuito TVO</div>
       <div class="logo-sub">Turismo & Biodiversidade — Teresópolis</div>
@@ -521,13 +521,13 @@
         <div class="form-group col-full"><label>Descrição</label><textarea id="trail-description" placeholder="Descreva a trilha..."></textarea></div>
       </div>
       <div class="form-actions">
-        <button class="btn-primary" onclick="createTrail()">✓ Salvar trilha</button>
+        <button class="btn-primary" onclick="createTrail()">Salvar trilha</button>
         <button class="btn-ghost" onclick="toggleForm('form-trail')">Cancelar</button>
       </div>
     </div>
     <div id="trails-loading" class="loading"><div class="loading-spinner"></div>Buscando trilhas...</div>
     <div id="trails-grid" class="cards-grid hidden"></div>
-    <div id="trails-empty" class="empty hidden"><div class="empty-icon">🥾</div><p>Nenhuma trilha cadastrada ainda.</p></div>
+    <div id="trails-empty" class="empty hidden"><div class="empty-icon">--</div><p>Nenhuma trilha cadastrada ainda.</p></div>
   </section>
 
   <!-- eventos -->
@@ -545,7 +545,7 @@
         <div class="form-group col-full"><label>Descrição</label><textarea id="event-description" placeholder="Detalhes do evento..."></textarea></div>
       </div>
       <div class="form-actions">
-        <button class="btn-primary" onclick="createEvent()">✓ Salvar evento</button>
+        <button class="btn-primary" onclick="createEvent()">Salvar evento</button>
         <button class="btn-ghost" onclick="toggleForm('form-event')">Cancelar</button>
       </div>
     </div>
@@ -581,7 +581,7 @@
     <div id="event-detail" class="detail-panel hidden"></div>
     <div id="events-loading" class="loading"><div class="loading-spinner"></div>Buscando eventos...</div>
     <div id="events-grid" class="cards-grid hidden"></div>
-    <div id="events-empty" class="empty hidden"><div class="empty-icon">📅</div><p>Nenhum evento cadastrado ainda.</p></div>
+    <div id="events-empty" class="empty hidden"><div class="empty-icon">--</div><p>Nenhum evento cadastrado ainda.</p></div>
   </section>
 
   <!-- biodiversidade -->
@@ -597,27 +597,27 @@
         <div class="form-group"><label>Tipo *</label>
           <select id="bio-type">
             <option value="">Selecione...</option>
-            <option value="fauna">🐾 Fauna</option>
-            <option value="flora">🌿 Flora</option>
+            <option value="fauna">Fauna</option>
+            <option value="flora">Flora</option>
           </select>
         </div>
         <div class="form-group col-full"><label>Descrição</label><textarea id="bio-description" placeholder="Características, habitat, status de conservação..."></textarea></div>
       </div>
       <div class="form-actions">
-        <button class="btn-primary" onclick="createBio()">✓ Salvar espécie</button>
+        <button class="btn-primary" onclick="createBio()">Salvar espécie</button>
         <button class="btn-ghost" onclick="toggleForm('form-bio')">Cancelar</button>
       </div>
     </div>
     <div id="bio-loading" class="loading"><div class="loading-spinner"></div>Buscando espécies...</div>
     <div id="bio-grid" class="cards-grid hidden"></div>
-    <div id="bio-empty" class="empty hidden"><div class="empty-icon">🌿</div><p>Nenhuma espécie cadastrada ainda.</p></div>
+    <div id="bio-empty" class="empty hidden"><div class="empty-icon">--</div><p>Nenhuma espécie cadastrada ainda.</p></div>
   </section>
 
   <!-- métricas -->
   <section id="tab-metrics" class="hidden">
     <div class="section-header">
       <div><h2>Métricas de engajamento</h2><p>Interações registradas pelos usuários da plataforma</p></div>
-      <button class="btn-ghost" onclick="loadMetrics()">↻ Atualizar</button>
+      <button class="btn-ghost" onclick="loadMetrics()">Atualizar</button>
     </div>
     <div id="metrics-loading" class="loading"><div class="loading-spinner"></div>Calculando métricas...</div>
     <div id="metrics-content" class="hidden">
@@ -628,7 +628,7 @@
       </div>
     </div>
     <div id="metrics-empty" class="empty hidden">
-      <div class="empty-icon">📊</div>
+      <div class="empty-icon">--</div>
       <p>Nenhuma interação registrada ainda.</p>
     </div>
   </section>
@@ -699,7 +699,7 @@
   // ---- msgs de erro ----
   function toast(msg, err = false) {
     const t = document.getElementById('toast');
-    t.innerHTML = (err ? '⚠ ' : '✓ ') + msg;
+    t.innerHTML = msg;
     t.className = 'toast show' + (err ? ' error' : '');
     clearTimeout(t._t);
     t._t = setTimeout(() => { t.className = 'toast'; }, 3000);
@@ -743,7 +743,7 @@
 
   // nivelamento das trilhas
   const diffLabel = { facil: 'Fácil', moderado: 'Moderado', dificil: 'Difícil' };
-  const diffIcon  = { facil: '🟢', moderado: '🟡', dificil: '🔴' };
+  const diffIcon  = { facil: 'F', moderado: 'M', dificil: 'D' };
   const badge = (cls, label) => `<span class="badge badge-${cls}">${label}</span>`;
   const metaItem = (icon, text) => `<span class="meta-item">${icon} ${text}</span>`;
   const fmtDate = iso => new Date(iso).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -815,15 +815,15 @@
       if (!data.length) { setState('trails', 'empty'); return; }
       document.getElementById('trails-grid').innerHTML = data.map(t => `
         <div class="card" data-track-key="trilha-${t.id}" data-track-evento="view_trail" data-track-id="${t.id}" data-track-tipo="trilha">
-          ${cardImg(t.imagem, t.dificuldade, diffIcon[t.dificuldade] || '🥾')}
+          ${cardImg(t.imagem, t.dificuldade, diffIcon[t.dificuldade] || 'T')}
           <div class="card-body">
             <div class="card-top">
               <h3>${t.nome}</h3>
               ${badge(t.dificuldade, diffLabel[t.dificuldade] || t.dificuldade)}
             </div>
             <div class="card-meta">
-              ${metaItem('📍', t.localizacao)}
-              ${metaItem('📏', t.distancia + ' km')}
+              ${metaItem('Local:', t.localizacao)}
+              ${metaItem('Distância:', t.distancia + ' km')}
             </div>
             ${t.descricao ? `<p class="card-desc">${t.descricao}</p>` : ''}
             <div class="card-footer">
@@ -1043,11 +1043,11 @@
       if (!data.length) { setState('bio', 'empty'); return; }
       document.getElementById('bio-grid').innerHTML = data.map(b => `
         <div class="card" data-track-key="bio-${b.id}" data-track-evento="view_biodiversity" data-track-id="${b.id}" data-track-tipo="biodiversidade">
-          ${cardImg(b.imagem, b.tipo, b.tipo === 'fauna' ? '🐾' : '🌿', classeImagemBio(b.imagem))}
+          ${cardImg(b.imagem, b.tipo, b.tipo === 'fauna' ? 'F' : 'FL', classeImagemBio(b.imagem))}
           <div class="card-body">
             <div class="card-top">
               <h3>${b.nome}</h3>
-              ${badge(b.tipo, b.tipo === 'fauna' ? '🐾 Fauna' : '🌿 Flora')}
+              ${badge(b.tipo, b.tipo === 'fauna' ? 'Fauna' : 'Flora')}
             </div>
             ${b.descricao ? `<p class="card-desc bio-desc">${b.descricao}</p>` : ''}
             <div class="card-footer">
